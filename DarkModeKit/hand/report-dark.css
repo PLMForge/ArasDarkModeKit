@@ -1,0 +1,159 @@
+@media screen {
+
+  html[data-theme="dark"][data-dm-doc="report"] {
+    color-scheme: dark;
+    --dm-report-fill-1: color-mix(in srgb, var(--dm-text) 3.7%, var(--dm-surface));
+    --dm-report-fill-2: color-mix(in srgb, var(--dm-text) 7.3%, var(--dm-surface));
+  }
+  html[data-theme="dark"][data-dm-doc="report"] body {
+    background: var(--dm-surface) !important;
+    color: var(--dm-text);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] table,
+  html[data-theme="dark"][data-dm-doc="report"] th,
+  html[data-theme="dark"][data-dm-doc="report"] td {
+    border-color: var(--dm-border-subtle);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] a,
+  html[data-theme="dark"][data-dm-doc="report"] a:visited {
+    color: var(--dm-link);
+  }
+
+  html[data-theme="dark"][data-dm-doc="report"] [style*="color:#ff0000" i],
+  html[data-theme="dark"][data-dm-doc="report"] [style*="color: #ff0000" i],
+  html[data-theme="dark"][data-dm-doc="report"] [style*="color:red" i],
+  html[data-theme="dark"][data-dm-doc="report"] [style*="color: red" i],
+  html[data-theme="dark"][data-dm-doc="report"] [style*="color: rgb(255, 0, 0)"] {
+    color: var(--dm-error-text) !important;
+  }
+  html[data-theme="dark"][data-dm-doc="report"] [style*="#3668b1" i],
+  html[data-theme="dark"][data-dm-doc="report"] [style*="color: rgb(54, 104, 177)"] {
+    color: var(--dm-link) !important;
+  }
+  html[data-theme="dark"][data-dm-doc="report"] [bgcolor="buttonface" i] {
+    background-color: var(--dm-report-fill-2);
+    color: var(--dm-text);
+  }
+
+  html[data-theme="dark"][data-dm-doc="report"] td.mainTitle {
+    color: var(--dm-error-text);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] td.section {
+    background-color: var(--dm-report-fill-2);
+  }
+
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolid,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidTopRight,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidTopLeft,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidRightBottom,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidBottomLeft,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidTop,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidRight,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidBottom,
+  html[data-theme="dark"][data-dm-doc="report"] .cellSolidLeft,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashed,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedTopRight,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedTopLeft,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedBottomRight,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedBottomLeft,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedTop,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedRight,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedBottom,
+  html[data-theme="dark"][data-dm-doc="report"] .cellDashedLeft {
+    border-color: var(--dm-border);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .cellHeader,
+  html[data-theme="dark"][data-dm-doc="report"] .cellHeaderVertBT,
+  html[data-theme="dark"][data-dm-doc="report"] .cellHeaderVertTB {
+    background-color: var(--dm-report-fill-2);
+    border-color: var(--dm-border);
+    color: var(--dm-text);
+  }
+
+  html[data-theme="dark"][data-dm-doc="report"] .background-grey {
+    background: var(--dm-report-fill-2);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .background-light-grey {
+    background: var(--dm-report-fill-1);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .background-yellow {
+    background: var(--dm-search-match-2);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .color-green {
+    color: var(--dm-success-text);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .link {
+    color: var(--dm-link);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] tbody > .rows-separator:not(:first-child) {
+    border-top-color: var(--dm-border-subtle);
+  }
+
+  html[data-theme="dark"][data-dm-doc="report"] .itHeader {
+    background-color: var(--dm-secondary);
+    color: var(--dm-on-accent);
+    border-left-color: var(--dm-surface);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .itErrorHeader {
+    background-color: var(--dm-surface);
+    color: var(--dm-error-text);
+    border-left-color: var(--dm-surface);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .itCell1 {
+    background-color: var(--dm-surface);
+    color: var(--dm-text-secondary);
+    border-color: var(--dm-border);
+    border-left-color: var(--dm-surface);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .itCell2 {
+    background-color: var(--dm-surface);
+    color: var(--dm-text);
+    border-color: var(--dm-border);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .itInfo {
+    background-color: var(--dm-report-fill-1);
+    color: var(--dm-text);
+    border-bottom-color: var(--dm-border);
+    border-left-color: var(--dm-surface);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .istCell {
+    background-color: var(--dm-surface);
+    color: var(--dm-text);
+    border-bottom-color: var(--dm-border-subtle);
+    border-left-color: var(--dm-surface);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .istCellHvr {
+    background-color: var(--dm-report-fill-2);
+    color: var(--dm-text);
+    border-bottom-color: var(--dm-border);
+    border-left-color: var(--dm-surface);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .istNumSpan {
+    color: var(--dm-text-secondary);
+  }
+  html[data-theme="dark"][data-dm-doc="report"] .istHeader {
+    background-color: var(--dm-report-fill-1);
+    color: var(--dm-text-secondary);
+    border-top-color: var(--dm-surface);
+    border-left-color: var(--dm-surface);
+  }
+
+  html[data-theme="dark"][data-dm-doc="plm-report"] {
+    color-scheme: dark;
+  }
+  html[data-theme="dark"][data-dm-doc="plm-report"] body {
+    background-color: var(--dm-surface-canvas) !important;
+    color: var(--dm-text);
+  }
+  html[data-theme="dark"][data-dm-doc="plm-report"] .table_wrapper {
+    background-color: var(--dm-surface);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.384), 0 3px 4px rgba(0, 0, 0, 0.384);
+  }
+  html[data-theme="dark"][data-dm-doc="plm-report"] th,
+  html[data-theme="dark"][data-dm-doc="plm-report"] td {
+    border-bottom-color: var(--dm-border-subtle);
+  }
+  html[data-theme="dark"][data-dm-doc="plm-report"] a {
+    color: var(--dm-link);
+  }
+}

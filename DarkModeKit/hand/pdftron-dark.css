@@ -1,0 +1,96 @@
+html[data-theme="dark"] {
+	color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+	background: #15171c;
+	color: #dde0e8;
+}
+
+html[data-theme="dark"] #tabMenu,
+html[data-theme="dark"] #control.ui-widget-header {
+	background: #24262d;
+}
+
+html[data-theme="dark"] .ui-widget-content,
+html[data-theme="dark"] .ui-tabs .ui-tabs-panel,
+html[data-theme="dark"] #sidePanel,
+html[data-theme="dark"] #searchControl,
+html[data-theme="dark"] .toggleControl,
+html[data-theme="dark"] #zoomBox:focus {
+	background: #1e2027;
+	color: #dde0e8;
+	border-color: #3e4046;
+}
+
+html[data-theme="dark"] .ui-widget-header {
+	background: #24262d;
+	color: #dde0e8;
+	border-color: #3e4046;
+}
+
+html[data-theme="dark"] .ui-state-default,
+html[data-theme="dark"] .ui-widget-content .ui-state-default,
+html[data-theme="dark"] .ui-widget-header .ui-state-default {
+	background: #25272e;
+	color: #dde0e8;
+	border-color: #3e4046;
+}
+
+html[data-theme="dark"] .ui-state-hover,
+html[data-theme="dark"] .ui-widget-content .ui-state-hover,
+html[data-theme="dark"] .ui-widget-header .ui-state-hover {
+	background: #2c2e34;
+	color: #f3f4f6;
+}
+
+html[data-theme="dark"] .ui-state-active,
+html[data-theme="dark"] .ui-widget-content .ui-state-active,
+html[data-theme="dark"] .ui-widget-header .ui-state-active {
+	background: #263a57;
+	color: #dde0e8;
+	border-color: #74777e;
+}
+
+html[data-theme="dark"] .ui-selected .ui-widget-content,
+html[data-theme="dark"] .thumbContainer.selected,
+html[data-theme="dark"] .bookmarkWrapper.selected,
+html[data-theme="dark"] .searchResultLine.selected,
+html[data-theme="dark"] .ui-buttonset label.ui-state-active {
+	background: #263a57 !important;
+}
+
+html[data-theme="dark"] .glyphicons:before,
+html[data-theme="dark"] .icon-picker .glyphicons:before,
+html[data-theme="dark"] .colorButton .glyphicons:before {
+	color: #b5b8c0 !important;
+}
+
+html[data-theme="dark"] .glyphicons:hover:before,
+html[data-theme="dark"] .glyphicons.active:before,
+html[data-theme="dark"] .colorButton.active .glyphicons:before {
+	color: #6aa6ff !important;
+}
+
+html[data-theme="dark"] .glyphicons.disabled:before,
+html[data-theme="dark"] .glyphicons.disabled:hover:before {
+	color: #74777e !important;
+}
+
+html[data-theme="dark"] #notesPanelWrapper,
+html[data-theme="dark"] #notesPanel {
+	background: #1e2027;
+	color: #dde0e8;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+	background: #1e2027;
+	color: #dde0e8;
+	border-color: #6b717d;
+}
+
+html[data-theme="dark"] .thumbContainer {
+	color: #b5b8c0;
+}

@@ -1,0 +1,148 @@
+{
+ "extends": "_common.json",
+ "version": "14.0.25",
+ "detect": {
+  "clientVersion": "14.0.25.*"
+ },
+ "tokens": {
+  "legacy": {
+   "--theme-secondary": "--theme-secondary",
+   "--theme-subtle": "--theme-subtle",
+   "--theme-highlight": "--theme-highlight",
+   "--blue-5": "--blue-5",
+   "--red-7": "--red-7",
+   "--theme-main": "keep",
+   "--theme-primary": "keep"
+  }
+ },
+ "ramp": [
+  [
+   "--neutral-f",
+   "#ffffff"
+  ],
+  [
+   "--neutral-fb",
+   "#fbfbfb"
+  ],
+  [
+   "--neutral-f7",
+   "#f7f7f7"
+  ],
+  [
+   "--neutral-e",
+   "#eeeeee"
+  ],
+  [
+   "--neutral-d",
+   "#dddddd"
+  ],
+  [
+   "--neutral-c",
+   "#cccccc"
+  ],
+  [
+   "--neutral-a",
+   "#aaaaaa"
+  ],
+  [
+   "--neutral-9",
+   "#999999"
+  ],
+  [
+   "--neutral-7",
+   "#707070"
+  ],
+  [
+   "--neutral-5",
+   "#555555"
+  ],
+  [
+   "--neutral-3",
+   "#333333"
+  ],
+  [
+   "--neutral-1",
+   "#111111"
+  ]
+ ],
+ "light": {
+  "--text": "#333333",
+  "--text-strong": "#111111",
+  "--text-secondary": "#555555",
+  "--text-muted": "#707070",
+  "--text-disabled": "#808080",
+  "--on-accent": "#ffffff",
+  "--icon": "#555555",
+  "--link": "#0d47a1",
+  "--border-subtle": "#cccccc",
+  "--border": "#999999",
+  "--border-input": "#505050",
+  "--primary": "#182bfb",
+  "--primary-text": "#182bfb",
+  "--focus": "#0303b0",
+  "--secondary": "#4b4b68",
+  "--secondary-text": "#4b4b68",
+  "--error": "#d32f2f",
+  "--error-text": "#d32f2f",
+  "--error-subtle": "#fff5f6",
+  "--success": "#388e3c",
+  "--success-text": "#388e3c",
+  "--warning": "#ffa726",
+  "--warning-text": "#ffa726",
+  "--on-warning": "#000000",
+  "--selection": "#e2e6f3",
+  "--highlight-row": "#f8eec0",
+  "--search-match-1": "#fefbd7",
+  "--search-match-2": "#fef7af",
+  "--search-match-3": "#fdf386",
+  "--required-bg": "#fef7af",
+  "--calendar-today": "#182bfb",
+  "--theme-main": "#0303b0",
+  "--theme-primary": "#182bfb"
+ },
+ "rules": {
+  "--text-disabled": "ramp",
+  "--theme-main": {
+   "rule": "keep"
+  },
+  "--theme-primary": {
+   "rule": "keep"
+  },
+  "--theme-secondary": {
+   "rule": "alias",
+   "to": "--secondary"
+  },
+  "--theme-subtle": {
+   "rule": "alias",
+   "to": "--selection"
+  },
+  "--theme-highlight": {
+   "rule": "alias",
+   "to": "--required-bg"
+  },
+  "--blue-5": {
+   "rule": "alias",
+   "to": "--link"
+  },
+  "--red-7": {
+   "rule": "alias",
+   "to": "--error-text"
+  }
+ },
+ "pins": {
+  "ramp": {}
+ },
+ "assertChecks": false,
+ "shadows": {
+  "--shadow-a": "0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.16)",
+  "--shadow-a-2": "0 1px 1px rgba(0, 0, 0, 0.08), 0 1px 0 rgba(0, 0, 0, 0.2)",
+  "--shadow-b": "0 1px 3px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.24)",
+  "--shadow-c": "0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.24)",
+  "--shadow-d": "0 5px 8px rgba(0, 0, 0, 0.24), 0 3px 4px rgba(0, 0, 0, 0.24)",
+  "--shadow-e": "0 16px 36px rgba(0, 0, 0, 0.32), 0 8px 12px rgba(0, 0, 0, 0.24)",
+  "--shadow-x": "0 1px 3px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.56)",
+  "--shadow-y": "0 1px 4px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0, 0, 0, 0.32)",
+  "--shadow-a-i": "0 1px 2px rgba(0, 0, 0, 0.08) inset, 0 1px 1px rgba(0, 0, 0, 0.16) inset",
+  "--shadow-b-i": "0 1px 3px rgba(0, 0, 0, 0.16) inset, 0 1px 2px rgba(0, 0, 0, 0.24) inset"
+ }
+}

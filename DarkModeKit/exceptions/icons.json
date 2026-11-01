@@ -1,0 +1,123 @@
+{
+	"cutout": {
+		"InfoActions": "all",
+		"InfoActionsHover": "all",
+		"ManageFile": "all",
+		"OfficeDocumentReference": "all",
+		"Paste": "all",
+		"PrintPreview": "all",
+		"ExportToExcel": {
+			"indices": [
+				1
+			],
+			"whites": 2
+		},
+		"ExportToWord": {
+			"indices": [
+				1
+			],
+			"whites": 2
+		},
+		"QualityExcel": {
+			"indices": [
+				0
+			],
+			"whites": 2
+		},
+		"QualityPrint": {
+			"indices": [
+				1,
+				2
+			],
+			"whites": 3
+		},
+		"RequirementDocument": {
+			"indices": [
+				0
+			],
+			"whites": 2
+		},
+		"WatermarkType": "all",
+		"Dropdown": {
+			"indices": [
+				0,
+				1
+			],
+			"whites": 3
+		},
+		"PublishWorkInstructions": {
+			"indices": [
+				0,
+				1
+			],
+			"whites": 2
+		},
+		"ECN": "all",
+		"ECR": "all",
+		"ExpressECO": "all",
+		"PR": "all",
+		"SimpleECO": "all",
+		"SimpleMCO": "all"
+	},
+	"keepWhite": [
+		"DesignQualityDocument",
+		"ProcessQualityDocument"
+	],
+	"noRemap": [
+		"HeaderLogoNash"
+	],
+	"logos": {
+		"ids": [
+			"HeaderLogo",
+			"LoginLogo",
+			"aras-innovator"
+		],
+		"colors": [
+			"#4f4f4f",
+			"#555555"
+		],
+		"inkToken": "--text"
+	},
+	"grayBases": [
+		"#4f4f4f",
+		"#878787",
+		"#696969",
+		"#505050",
+		"#757575",
+		"#424242"
+	],
+	"grayBaseTokens": [
+		"--icon",
+		"--border",
+		"--text-muted"
+	],
+	"liftMinContrast": 3,
+	"liftExclude": [
+		"#0f66cb",
+		"#cc2027",
+		"#e98a3d",
+		"#177659",
+		"#d49623"
+	],
+	"liftExcludeTokens": [
+		"--primary",
+		"--error",
+		"--success",
+		"--warning"
+	],
+	"liftExcludeTokenMinContrast": 2.5,
+	"noFill": {
+		"ToastWarning": {
+			"light": "#000",
+			"static": "#000000",
+			"cssDark": "var(--dm-on-warning, #000000)"
+		},
+		"markuptoolbar/others/black_triangle": {
+			"light": "#000",
+			"static": "--icon"
+		}
+	},
+	"aliases": {
+		"#353535380": "#353535"
+	}
+}

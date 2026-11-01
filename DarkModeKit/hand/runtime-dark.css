@@ -1,0 +1,102 @@
+html[data-theme="dark"] [style*="--item-type-color-dark"] {
+	--item-type-color: var(--item-type-color-dark) !important;
+}
+
+html[data-theme="dark"] .aras-viewers-tabs .aras-tabs__tab:not(.aras-tabs__tab_active):hover,
+html[data-theme="dark"] .aras-viewers-tabs .aras-tabs__tab:not(.aras-tabs__tab_active):active,
+html[data-theme="dark"] .aras-viewers-tabs .aras-tabs__tab_active,
+html[data-theme="dark"] .aras-viewers-tabs .aras-tabs__tab_viewing:focus-within {
+	background: color-mix(in srgb, var(--background-color) 20%, var(--dm-surface));
+}
+html[data-theme="dark"] .aras-viewers-tabs .aras-tabs__tab_viewing:focus-visible {
+	background: none;
+}
+html[data-theme="dark"] .aras-viewers-tabs .aras-tabs__tab:not(.aras-tabs__tab_active) .aras-tabs__icon {
+	filter: brightness(0) invert(76%);
+}
+
+html[data-theme="dark"][style*="--theme-primary-text-dark"] {
+	--dm-primary-text: var(--theme-primary-text-dark);
+	--dm-focus: var(--theme-primary-text-dark);
+	--focus: var(--theme-primary-text-dark);
+}
+
+html[data-theme="dark"] .dojoxGridCell[style*="background-color:#ffffff" i],
+html[data-theme="dark"] .dojoxGridCell a[style*="background-color:#ffffff" i],
+html[data-theme="dark"] .dojoxGridCell[style*="background-color: rgb(255, 255, 255)"],
+html[data-theme="dark"] .dojoxGridCell a[style*="background-color: rgb(255, 255, 255)"] {
+	background-color: var(--dm-surface) !important;
+}
+html[data-theme="dark"] .dojoxGridCell[style*="background-color:#e7deef" i],
+html[data-theme="dark"] .dojoxGridCell a[style*="background-color:#e7deef" i],
+html[data-theme="dark"] .dojoxGridCell[style*="background-color: rgb(231, 222, 239)"],
+html[data-theme="dark"] .dojoxGridCell a[style*="background-color: rgb(231, 222, 239)"] {
+	background-color: color-mix(in srgb, #9e45af 20%, var(--dm-surface)) !important;
+}
+html[data-theme="dark"] .dojoxGridCell[style*="background-color:#fbe4d5" i],
+html[data-theme="dark"] .dojoxGridCell a[style*="background-color:#fbe4d5" i],
+html[data-theme="dark"] .dojoxGridCell[style*="background-color: rgb(251, 228, 213)"],
+html[data-theme="dark"] .dojoxGridCell a[style*="background-color: rgb(251, 228, 213)"] {
+	background-color: color-mix(in srgb, #d26b17 20%, var(--dm-surface)) !important;
+}
+html[data-theme="dark"] .dojoxGridCell[style*=";color:#3668b1" i],
+html[data-theme="dark"] .dojoxGridCell[style^="color:#3668b1" i],
+html[data-theme="dark"] .dojoxGridCell a[style^="color:#3668b1" i],
+html[data-theme="dark"] .dojoxGridCell[style*="; color: rgb(54, 104, 177)"],
+html[data-theme="dark"] .dojoxGridCell[style^="color: rgb(54, 104, 177)"],
+html[data-theme="dark"] .dojoxGridCell a[style^="color: rgb(54, 104, 177)"] {
+	color: var(--dm-link) !important;
+}
+
+html[data-theme="dark"] table#item_status {
+	background-color: var(--dm-surface) !important;
+	border-color: var(--dm-border) !important;
+}
+html[data-theme="dark"] table#item_status td[style*="color:#0000ff" i],
+html[data-theme="dark"] table#item_status td[style*="color: rgb(0, 0, 255)"] {
+	color: var(--dm-primary-text) !important;
+}
+
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg text[fill="rgb(0, 0, 0)"] {
+	fill: var(--dm-text);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg text[fill="rgb(0, 0, 255)"] {
+	fill: var(--dm-primary-text);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg text[fill="rgb(192, 192, 192)"] {
+	fill: var(--dm-text-disabled);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg [stroke="rgb(128, 128, 128)"] {
+	stroke: var(--dm-border);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg [fill="rgb(128, 128, 128)"] {
+	fill: var(--dm-border);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg [stroke="rgb(255, 0, 0)"] {
+	stroke: var(--dm-error-text);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg [fill="rgb(255, 0, 0)"] {
+	fill: var(--dm-error-text);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg [fill="rgb(253, 243, 134)"] {
+	fill: var(--dm-search-match-3);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg rect[fill="rgb(255, 255, 255)"] {
+	fill: var(--dm-surface-raised);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg rect[fill="rgb(238, 238, 0)"] {
+	fill: var(--dm-warning);
+}
+html[data-theme="dark"] :is(#workflow, #WflGraphic) svg text[fill="rgb(136, 136, 136)"] {
+	fill: var(--dm-text-muted);
+}
+
+html[data-theme="dark"] body[style*="background-color:#FFFFFF" i],
+html[data-theme="dark"] body[style*="background-color: rgb(255, 255, 255)"] {
+	background-color: var(--dm-surface) !important;
+}
+html[data-theme="dark"] body[bgcolor="white" i],
+html[data-theme="dark"] body[bgcolor="#ffffff" i] {
+	background-color: var(--dm-surface);
+	color: var(--dm-text);
+}
