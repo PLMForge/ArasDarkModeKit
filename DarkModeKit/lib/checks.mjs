@@ -1027,7 +1027,7 @@ export async function checkA({ target, snapshot, manifest, injectTargets = [] })
 			c.fails.push(`${rel}: marker text left after stripping (unrecognised block shape) at ${lineCol(stripped, stripped.search(/aras-darkmode:(begin|end)/))}`);
 			continue;
 		}
-		let a = sText;
+		let a = util.stripForeignBlocks(sText);
 		let b = stripped;
 		const isConfig = rel.toLowerCase() === CONFIG_REL.toLowerCase();
 		if (isConfig) {
