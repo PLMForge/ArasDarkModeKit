@@ -142,7 +142,7 @@ const INLINE_ATTR = /\[(style|fill|stroke|bgcolor|color|background)[\^*$~|]?=/i;
 export function stripGates(sel) {
 	let s = sel;
 	for (let guard = 0; guard < 4; guard++) {
-		const m = /^:where\(:has\(/.exec(s);
+		const m = /^:where\((?::has\(|\[data-dm-scope~=)/.exec(s);
 		if (!m) break;
 		const close = C.matchParen(s, 6);
 		if (close < 0) break;

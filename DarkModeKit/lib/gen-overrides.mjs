@@ -526,6 +526,27 @@ function isGenericSel(p, sharedRe) {
 	const s = p.replace(/:not\([^)]*\)/g, '').replace(sharedRe, '').replace(/\[(id|type|name|disabled|readonly)(?:[~|^$*]?=[^\]]*)?\]/gi, '');
 	return !/[.#\[]/.test(s);
 }
+export function scopeToken(marker) {
+	let m;
+	if ((m = /^link\[href\*="([^"\s]+)"\]$/.exec(marker))) return m[1];
+	if ((m = /^link\[href="([^"\s]+)"\]$/.exec(marker))) return '=' + m[1];
+	return marker.replace(/\s+/g, '');
+}
+export function scopeGate(marker) {
+	return `[data-dm-scope~="${scopeToken(marker).replace(/["\\]/g, '\\$&')}"]`;
+}
+export function scopeList(EX) {
+	const seen = new Set();
+	const out = [];
+	for (const [f, marker] of Object.entries(EX.scopes || {})) {
+		if (f.startsWith('_') || typeof marker !== 'string') continue;
+		const t = scopeToken(marker);
+		if (seen.has(t)) continue;
+		seen.add(t);
+		out.push({ t, s: marker });
+	}
+	return out;
+}
 export function prefixSelector(X, sel, file, layer) {
 	const parts = splitTop(sel, ',').map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean);
 	const out = [];
@@ -543,7 +564,7 @@ export function prefixSelector(X, sel, file, layer) {
 				dropped.push(p);
 				continue;
 			}
-			has = `:has(${marker[1]})`;
+			has = scopeGate(marker[1]);
 		}
 		const root = (where ? DARK_WHERE : DARK) + (has ? `:where(${has})` : '');
 		let m;
@@ -906,6 +927,7 @@ export async function generate({ target, snapshot, anchors, out, exceptions, onl
 	if (only !== 'tokens') {
 		W('client/gen/overrides.css', overridesCss);
 		W('data/sheets.json', JSON.stringify(sheets) + '\n');
+		W('data/scopes.json', JSON.stringify(scopeList(X.EX)) + '\n');
 		W('report/sheets-originals.json', JSON.stringify(originals, null, 1) + '\n');
 		W('report/coverage-css.json', JSON.stringify(coverage, null, 1) + '\n');
 		W('report/bundle-css.json', JSON.stringify({ engine: bundle.engine, bundles: bundle.bundles, perBundle: bundle.perBundle, dynamic: bundle.dynamic, strings: bundle.strings.map((s) => ({ key: s.key, length: s.text.length, bundles: s.bundles })) }, null, 1) + '\n');

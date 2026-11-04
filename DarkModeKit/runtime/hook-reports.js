@@ -47,7 +47,7 @@
 				source: source,
 				kind: kind,
 				ok: !!ok,
-				doc: doc,
+				doc: typeof WeakRef === 'function' ? new WeakRef(doc) : { deref: function () { return undefined; } },
 				time: Date.now()
 			});
 			return ok;

@@ -135,24 +135,39 @@
 		return win;
 	}
 
+	var hasWeakRef = typeof WeakRef === 'function';
 	var decorated = [];
-	function rethemeDecorated(theme) {
+	function refOf(doc) {
+		return hasWeakRef ? new WeakRef(doc) : doc;
+	}
+	function docOf(ref) {
+		return hasWeakRef ? ref.deref() : ref;
+	}
+	function liveWindowOf(doc) {
+		try {
+			var win = doc && doc.defaultView;
+			return win && !win.closed && doc.documentElement ? win : null;
+		} catch (e) {
+			return null;
+		}
+	}
+	function pruneDecorated() {
 		var keep = [];
 		for (var i = 0; i < decorated.length; i++) {
-			var doc = decorated[i];
-			var win = null;
-			try {
-				win = doc.defaultView;
-				if (!win || win.closed || !doc.documentElement) {
-					continue;
-				}
-			} catch (e) {
-				continue;
+			if (liveWindowOf(docOf(decorated[i]))) {
+				keep.push(decorated[i]);
 			}
-			keep.push(doc);
-			walk(win, theme, 0);
 		}
 		decorated = keep;
+	}
+	function rethemeDecorated(theme) {
+		pruneDecorated();
+		for (var i = 0; i < decorated.length; i++) {
+			var win = liveWindowOf(docOf(decorated[i]));
+			if (win) {
+				walk(win, theme, 0);
+			}
+		}
 	}
 
 	function propagate(theme) {
@@ -170,6 +185,13 @@
 		rethemeDecorated(theme);
 	}
 
+	function watchScopes(doc) {
+		try {
+			if (typeof dm.watchScopes === 'function') {
+				dm.watchScopes(doc);
+			}
+		} catch (e) {}
+	}
 	var PLM_REPORT_CSS = /Solutions\/PLM\/styles\/report\.css/i;
 
 	function isInjected(doc) {
@@ -245,8 +267,13 @@
 			} else {
 				setRootTheme(root, theme);
 			}
-			if (decorated.indexOf(doc) === -1) {
-				decorated.push(doc);
+			pruneDecorated();
+			var known = false;
+			for (var d = 0; d < decorated.length && !known; d++) {
+				known = docOf(decorated[d]) === doc;
+			}
+			if (!known) {
+				decorated.push(refOf(doc));
 				if (decorated.length > 64) {
 					decorated.shift();
 				}
@@ -254,10 +281,12 @@
 			var kind = (options && options.kind) || 'report';
 			if (isInjected(doc)) {
 				ensureDarkCssLast(doc);
+				watchScopes(doc);
 				return true;
 			}
 			if (kind === 'page') {
 				root.setAttribute('data-dm-doc', 'page');
+				watchScopes(doc);
 				return addSheet(doc, 'dark.css');
 			}
 			root.setAttribute('data-dm-doc', isPlmReport(doc) ? 'plm-report' : 'report');

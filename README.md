@@ -55,9 +55,11 @@ This removes the marker blocks and the three output folders. `filesRevision` is 
 
 The original bytes of every file it edits are kept in `<install>\DarkModeKit\.snapshot\`.
 
-## After an Aras upgrade or hotfix
+Other tools may add their own marker blocks to the same pages: whole lines from `aras-<name>:begin` to `aras-<name>:end`. The script leaves those blocks in place when it applies or removes the dark mode.
 
-Delete `<install>\DarkModeKit\.snapshot`, then apply again.
+## After an Aras upgrade, a hotfix or another package
+
+If an upgrade, a hotfix or another package changes a client page, the next apply stops before writing anything and reports that the page differs from its snapshot. Delete `<install>\DarkModeKit\.snapshot`, then apply again.
 
 ## Other Aras versions
 

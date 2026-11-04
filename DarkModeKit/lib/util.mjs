@@ -232,8 +232,13 @@ export function stripV1Blocks(text) {
 	return out;
 }
 
+export const RE_FOREIGN_BLOCK = /^[ \t]*(?:<!-- |\/\/ )(aras-(?!darkmode:)[a-z0-9-]+):begin (\S+)(?: -->)?\r?\n[\s\S]*?^[ \t]*(?:<!-- |\/\/ )\1:end \2(?: -->)?\r?\n/gm;
+export function stripForeignBlocks(text) {
+	return text.replace(RE_FOREIGN_BLOCK, '');
+}
+
 export function reconstructPristine(text) {
-	return stripV1Blocks(stripKitBlocks(text));
+	return stripV1Blocks(stripKitBlocks(stripForeignBlocks(text)));
 }
 
 export function fail(logger, msg, code = 1) {

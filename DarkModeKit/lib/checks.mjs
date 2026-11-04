@@ -987,7 +987,7 @@ export function razorAtIssues(block) {
 }
 
 export function stripMarkers(text) {
-	return util.stripKitBlocks(text);
+	return util.stripKitBlocks(util.stripForeignBlocks(text));
 }
 
 export async function checkA({ target, snapshot, manifest, injectTargets = [] }) {
