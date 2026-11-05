@@ -3,8 +3,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as util from './util.mjs';
 import { parseColor, toHex6, hexKey, toCss, COLOR_SCAN, rgbChroma } from './color.mjs';
-import { loadAnchors, derive, createMapper, renderTokensCss, buildPalette, legacyDefs, DARK, DARK_WHERE } from './derive-palette.mjs';
+import { loadAnchors, scopeExceptions, derive, createMapper, renderTokensCss, buildPalette, legacyDefs, DARK, DARK_WHERE } from './derive-palette.mjs';
 import { extractBundleCss, fnv1a32 } from './extract-bundle-css.mjs';
+import { TARGETS } from './inject-entrypoints.mjs';
 
 const KIT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -226,7 +227,7 @@ export function createContext({ target, snapshot, anchors, exceptions, log }) {
 	const A = loadAnchors(anchors);
 	const D = derive(A);
 	const exFile = exceptions || path.join(KIT, 'exceptions', 'overrides.json');
-	const EX = util.readJson(exFile);
+	const EX = scopeExceptions(util.readJson(exFile), A);
 	const M = createMapper(A, D, EX);
 	const keepVars = (EX.keepVarFallbacks || []).filter((s) => !s.startsWith('_'));
 	const defs = {};
@@ -431,7 +432,8 @@ export function transformDecl(X, d, ctx, stats) {
 	};
 
 	if (P.startsWith('--')) {
-		if (X.legacyNames.has(d.prop)) return [];
+		const rootOnly = !ctx.sel || ctx.sel.split(',').every((s) => /^\s*(:root|html|body)(?![\w-])/i.test(s));
+		if (X.legacyNames.has(d.prop) && (rootOnly || !hasLit)) return [];
 		if (!hasLit && !hasDataSvg) return ctx.verbatim ? [`${d.prop}: ${v}${I}`] : [];
 		let t = mapped(v, role).text;
 		if (hasDataSvg) t = mapUrls(X, t, { ...ctx, prop: P }).text;
@@ -511,7 +513,9 @@ export function transformDecl(X, d, ctx, stats) {
 		}
 		const varT = toks.find((t) => /^var\(/i.test(t));
 		if (!ctx.verbatim) return [];
+		if (toks.some((t) => /^(none|hidden|0[a-z%]*)$/i.test(t))) return [];
 		if (varT && toks.length === 1) return [`${longhand}: ${varT}${I}`];
+		if (varT && toks.some((t) => /^(-?[\d.]+[a-z%]*|thin|medium|thick)$/i.test(t))) return [`${longhand}: ${varT}${I}`];
 		if (bm[1] === 'outline' || bm[1] === 'text-decoration') return [];
 		return [`${longhand}: currentcolor${I}`];
 	}
@@ -526,6 +530,10 @@ function isGenericSel(p, sharedRe) {
 	const s = p.replace(/:not\([^)]*\)/g, '').replace(sharedRe, '').replace(/\[(id|type|name|disabled|readonly)(?:[~|^$*]?=[^\]]*)?\]/gi, '');
 	return !/[.#\[]/.test(s);
 }
+export function pageMarker(file) {
+	const m = /^Innovator\/Client\/(.+)#style\d+$/.exec(file || '');
+	return m ? 'url:/' + m[1] : null;
+}
 export function scopeToken(marker) {
 	let m;
 	if ((m = /^link\[href\*="([^"\s]+)"\]$/.exec(marker))) return m[1];
@@ -535,10 +543,10 @@ export function scopeToken(marker) {
 export function scopeGate(marker) {
 	return `[data-dm-scope~="${scopeToken(marker).replace(/["\\]/g, '\\$&')}"]`;
 }
-export function scopeList(EX) {
+export function scopeList(EX, extra = []) {
 	const seen = new Set();
 	const out = [];
-	for (const [f, marker] of Object.entries(EX.scopes || {})) {
+	for (const [f, marker] of [...Object.entries(EX.scopes || {}), ...extra.map((m) => ['page', m])]) {
 		if (f.startsWith('_') || typeof marker !== 'string') continue;
 		const t = scopeToken(marker);
 		if (seen.has(t)) continue;
@@ -558,7 +566,9 @@ export function prefixSelector(X, sel, file, layer) {
 		if (/(^|[\s>+~])\.(dj_a11y|dj_ie\d*|dj_quirks|dijit_a11y|dj_ff\d|dj_ios|dj_android)\b/i.test(p)) continue;
 		const where = layer === 'where';
 		let has = '';
-		if (!global && isGenericSel(p, sharedRe)) {
+		const pm = pageMarker(file);
+		if (pm) has = scopeGate(pm);
+		else if (!global && isGenericSel(p, sharedRe)) {
 			const marker = Object.entries(EX.scopes || {}).find(([f]) => !f.startsWith('_') && new RegExp(f, 'i').test(file));
 			if (!marker) {
 				dropped.push(p);
@@ -634,8 +644,36 @@ export function discoverJsStyleSources(X) {
 	return { files, skipped };
 }
 
+export function discoverPageStyleSources(X) {
+	if ((X.EX.files || {}).pageStyles === false) return { files: [], skipped: [] };
+	const files = [];
+	const skipped = [];
+	for (const t of TARGETS) {
+		const rel = 'Innovator/Client/' + t;
+		let html;
+		try {
+			html = util.readText(util.resolveSource(rel)).text;
+		} catch {
+			continue;
+		}
+		let n = 0;
+		for (const m of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
+			n++;
+			let css = m[1];
+			if (/\.cshtml$/i.test(rel)) {
+				if (/@(?!@)/.test(css.replace(/@@/g, ''))) { skipped.push({ file: rel, block: n, why: 'Razor expression in <style>' }); continue; }
+				css = css.replace(/@@/g, '@');
+			}
+			if (!findLiterals(css).length) continue;
+			files.push({ rel: `${rel}#style${n}`, css });
+		}
+	}
+	return { files, skipped };
+}
+
 function layerOf(X, file, items) {
 	const L = X.EX.layers || {};
+	if (pageMarker(file)) return { layer: 'where', why: 'page <style> block' };
 	if (anyMatch(compileList(L.bump), file)) return { layer: 'bump', why: 'exceptions.layers.bump' };
 	if (anyMatch(compileList(L.where), file)) return { layer: 'where', why: 'exceptions.layers.where' };
 	const share = simpleShare(items);
@@ -853,6 +891,8 @@ export async function generate({ target, snapshot, anchors, out, exceptions, onl
 	});
 	const jsStyles = discoverJsStyleSources(X);
 	files.push(...jsStyles.files);
+	const pageStyles = discoverPageStyleSources(X);
+	files.push(...pageStyles.files);
 	const t1 = Date.now();
 	const bundle = extractBundleCss({ target, log: X.log });
 	const t2 = Date.now();
@@ -904,7 +944,7 @@ export async function generate({ target, snapshot, anchors, out, exceptions, onl
 	};
 	const palette = buildPalette(X.A, X.D, { readLess });
 
-	const coverage = { version: X.A.version, files: {}, bundles: {}, jsStyleSourcesSkipped: jsStyles.skipped, totals: { keptLiterals: 0, todoLiterals: 0, droppedSelectors: 0 } };
+	const coverage = { version: X.A.version, files: {}, bundles: {}, jsStyleSourcesSkipped: jsStyles.skipped, pageStylesSkipped: pageStyles.skipped, totals: { keptLiterals: 0, todoLiterals: 0, droppedSelectors: 0 } };
 	for (const s of fileStats) {
 		const bySel = {};
 		for (const k of s.kept) (bySel[k.sel] = bySel[k.sel] || []).push(`${k.role} ${k.lit}`);
@@ -927,7 +967,7 @@ export async function generate({ target, snapshot, anchors, out, exceptions, onl
 	if (only !== 'tokens') {
 		W('client/gen/overrides.css', overridesCss);
 		W('data/sheets.json', JSON.stringify(sheets) + '\n');
-		W('data/scopes.json', JSON.stringify(scopeList(X.EX)) + '\n');
+		W('data/scopes.json', JSON.stringify(scopeList(X.EX, pageStyles.files.map((f) => pageMarker(f.rel)))) + '\n');
 		W('report/sheets-originals.json', JSON.stringify(originals, null, 1) + '\n');
 		W('report/coverage-css.json', JSON.stringify(coverage, null, 1) + '\n');
 		W('report/bundle-css.json', JSON.stringify({ engine: bundle.engine, bundles: bundle.bundles, perBundle: bundle.perBundle, dynamic: bundle.dynamic, strings: bundle.strings.map((s) => ({ key: s.key, length: s.text.length, bundles: s.bundles })) }, null, 1) + '\n');

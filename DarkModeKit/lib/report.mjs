@@ -4,32 +4,32 @@ import * as util from './util.mjs';
 import * as C from './checks.mjs';
 
 export const HOOK_ANCHORS = [
-	{ id: 'replaceSync', hook: 'H1 hook-stylesheets', ref: '', where: 'bundles', all: ['new CSSStyleSheet', '\\.replaceSync\\('] },
-	{ id: 'adoptedStyleSheets', hook: 'H1 hook-stylesheets', ref: '', where: 'bundles', all: ['adoptedStyleSheets='] },
-	{ id: 'lit-cssText-styleSheet', hook: 'H1 hook-stylesheets', ref: 'lit CSSResult', where: 'bundles', all: ['\\.replaceSync\\(this\\.cssText\\)'], required: false },
-	{ id: 'svg-sprite-fetch', hook: 'H2 hook-svg', ref: 'include.aspx?svg=', where: 'bundles', all: ['"javascript/include\\.aspx"', '\\.set\\("svg",', 'window\\.fetch\\([\\w$]+\\.toString\\(\\),\\{headers:\\{Accept:"application/xml"'] },
-	{ id: 'svg-symbols', hook: 'H2 hook-svg', ref: '#svg-symbols', where: 'bundles', all: ['"svg-symbols"'] },
-	{ id: 'SvgManager-getSvgNode', hook: 'H2 hook-svg', ref: '', where: 'bundles', all: ['getSvgNode:'] },
-	{ id: 'aras-image-define', hook: 'H2 hook-components', ref: 'customElements.define "aras-image"', where: 'bundles', all: ['customElements\\.define\\(', '`aras-\\$\\{', 'aras-image__image'] },
-	{ id: 'aras-chart', hook: 'H2 hook-components', ref: 'aras-chart', where: 'bundles', all: ['aras-chart__canvas-container', '_chart'] },
-	{ id: 'window.fetch', hook: 'H2 hook-svg', ref: '', where: 'bundles', all: ['window\\.fetch\\('] },
-	{ id: 'CuiLayout-global', hook: 'H3 form/item-type colour', ref: '', where: 'bundles', all: ['window\\.CuiLayout=', 'window\\.ItemViewCuiLayout='] },
-	{ id: 'attachCssItemTypeColor', hook: 'H3 item-type colour', ref: '', where: 'bundles', all: ['attachCssItemTypeColor\\(\\)\\{'] },
-	{ id: 'reInitByCUIDependencies', hook: 'H3 theme-menu', ref: '', where: 'bundles', all: ['"reInitByCUIDependencies"'] },
-	{ id: 'headerCommandsBar', hook: 'H3 theme-menu', ref: '', where: 'file', file: 'Index.cshtml', all: ['id="headerCommandsBar"'] },
-	{ id: 'aras-header__user-menu', hook: 'H3 theme-menu', ref: '', where: 'file', file: 'styles/main.css', all: ['\\.aras-header__user-menu'] },
-	{ id: 'MonacoEnvironment-globalAPI', hook: 'H2 hook-apps (Monaco)', ref: '', where: 'bundles', all: ['globalThis\\.MonacoEnvironment', '\\?\\.globalAPI\\|\\|', 'globalThis\\.monaco='] },
-	{ id: 'MethodEditor.html', hook: 'H2 hook-apps (Monaco)', ref: '', where: 'file', file: 'scripts/CodeEditor/MethodEditor.html', all: ['methodEditor'] },
-	{ id: 'Aras-global', hook: 'H3 hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['function Aras\\(parent\\)'] },
-	{ id: 'targetReport', hook: 'H3 hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['Aras\\.prototype\\.targetReport\\s*=\\s*function'] },
-	{ id: 'invokeAction', hook: 'H3 hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['Aras\\.prototype\\.invokeAction\\s*=\\s*function'] },
-	{ id: 'getActionTargetWindow', hook: 'H3 hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['Aras\\.prototype\\.getActionTargetWindow\\s*=\\s*function'] },
-	{ id: 'modalDialog-writeContent', hook: 'H3 hook-reports', ref: 'other written documents', where: 'file', file: 'scripts/modalDialog.html', all: ['writeContent'] },
-	{ id: 'ShowFormAsADialog-formFrame', hook: 'H3 hook-reports', ref: '', where: 'file', file: 'scripts/ShowFormAsADialog.html', all: ['formFrame', 'document\\.write|\\.write\\('], required: false },
-	{ id: 'DomToSVG-toSVG', hook: 'H2 hook-apps (export)', ref: '', where: 'file', file: 'Modules/aras.innovator.Printing/Scripts/Classes/DomToSVG.ts', all: ['DomToSVG\\.prototype\\.toSVG\\s*=', 'DomToSVG\\.prototype\\._setInlineStyles\\s*='] },
-	{ id: 'PDFTron.WebViewer', hook: 'H2 hook-apps (PDFTron)', ref: '', where: 'file', file: 'Modules/aras.innovator.Viewers/Scripts/3rdPartyLibs/pdftronwebviewer-v2.2/lib/WebViewer.js', all: ['PDFTron\\.WebViewer\\s*=\\s*function'] },
-	{ id: 'Ace-setTheme', hook: 'H2 hook-apps (Ace)', ref: '', where: 'file', file: 'vendors/ace-editor/ace.js', all: ['setTheme\\s*=\\s*function', 'ace/virtual_renderer'] },
-	{ id: 'RichText-onLoad', hook: 'H2 hook-apps (HtmlEditor)', ref: '', where: 'file', file: 'javascript/dijit/_editor/RichText.js', all: ['define\\("dijit/_editor/RichText"', 'onLoad:function\\('] }
+	{ id: 'replaceSync', hook: 'hook-stylesheets', ref: '', where: 'bundles', all: ['new CSSStyleSheet', '\\.replaceSync\\('] },
+	{ id: 'adoptedStyleSheets', hook: 'hook-stylesheets', ref: '', where: 'bundles', all: ['adoptedStyleSheets='] },
+	{ id: 'lit-cssText-styleSheet', hook: 'hook-stylesheets', ref: 'lit CSSResult', where: 'bundles', all: ['\\.replaceSync\\(this\\.cssText\\)'], required: false },
+	{ id: 'svg-sprite-fetch', hook: 'hook-svg', ref: 'include.aspx?svg=', where: 'bundles', all: ['"javascript/include\\.aspx"', '\\.set\\("svg",', 'window\\.fetch\\([\\w$]+\\.toString\\(\\),\\{headers:\\{Accept:"application/xml"'] },
+	{ id: 'svg-symbols', hook: 'hook-svg', ref: '#svg-symbols', where: 'bundles', all: ['"svg-symbols"'] },
+	{ id: 'SvgManager-getSvgNode', hook: 'hook-svg', ref: '', where: 'bundles', all: ['getSvgNode:'] },
+	{ id: 'aras-image-define', hook: 'hook-components', ref: 'customElements.define "aras-image"', where: 'bundles', all: ['customElements\\.define\\(', '`aras-\\$\\{', 'aras-image__image'] },
+	{ id: 'aras-chart', hook: 'hook-components', ref: 'aras-chart', where: 'bundles', all: ['aras-chart__canvas-container', '_chart'] },
+	{ id: 'window.fetch', hook: 'hook-svg', ref: '', where: 'bundles', all: ['window\\.fetch\\('] },
+	{ id: 'CuiLayout-global', hook: 'form/item-type colour', ref: '', where: 'bundles', all: ['window\\.CuiLayout=', 'window\\.ItemViewCuiLayout='] },
+	{ id: 'attachCssItemTypeColor', hook: 'item-type colour', ref: '', where: 'bundles', all: ['attachCssItemTypeColor\\(\\)\\{'] },
+	{ id: 'reInitByCUIDependencies', hook: 'theme-menu', ref: '', where: 'bundles', all: ['"reInitByCUIDependencies"'] },
+	{ id: 'headerCommandsBar', hook: 'theme-menu', ref: '', where: 'file', file: 'Index.cshtml', all: ['id="headerCommandsBar"'] },
+	{ id: 'aras-header__user-menu', hook: 'theme-menu', ref: '', where: 'file', file: 'styles/main.css', all: ['\\.aras-header__user-menu'] },
+	{ id: 'MonacoEnvironment-globalAPI', hook: 'hook-apps (Monaco)', ref: '', where: 'bundles', all: ['globalThis\\.MonacoEnvironment', '\\?\\.globalAPI\\|\\|', 'globalThis\\.monaco='] },
+	{ id: 'MethodEditor.html', hook: 'hook-apps (Monaco)', ref: '', where: 'file', file: 'scripts/CodeEditor/MethodEditor.html', all: ['methodEditor'] },
+	{ id: 'Aras-global', hook: 'hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['function Aras\\(parent\\)'] },
+	{ id: 'targetReport', hook: 'hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['Aras\\.prototype\\.targetReport\\s*=\\s*function'] },
+	{ id: 'invokeAction', hook: 'hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['Aras\\.prototype\\.invokeAction\\s*=\\s*function'] },
+	{ id: 'getActionTargetWindow', hook: 'hook-reports', ref: '', where: 'file', file: 'javascript/aras_object.ts', all: ['Aras\\.prototype\\.getActionTargetWindow\\s*=\\s*function'] },
+	{ id: 'modalDialog-writeContent', hook: 'hook-reports', ref: 'other written documents', where: 'file', file: 'scripts/modalDialog.html', all: ['writeContent'] },
+	{ id: 'ShowFormAsADialog-formFrame', hook: 'hook-reports', ref: '', where: 'file', file: 'scripts/ShowFormAsADialog.html', all: ['formFrame', 'document\\.write|\\.write\\('], required: false },
+	{ id: 'DomToSVG-toSVG', hook: 'hook-apps (export)', ref: '', where: 'file', file: 'Modules/aras.innovator.Printing/Scripts/Classes/DomToSVG.ts', all: ['DomToSVG\\.prototype\\.toSVG\\s*=', 'DomToSVG\\.prototype\\._setInlineStyles\\s*='] },
+	{ id: 'PDFTron.WebViewer', hook: 'hook-apps (PDFTron)', ref: '', where: 'file', file: 'Modules/aras.innovator.Viewers/Scripts/3rdPartyLibs/pdftronwebviewer-v2.2/lib/WebViewer.js', all: ['PDFTron\\.WebViewer\\s*=\\s*function'] },
+	{ id: 'Ace-setTheme', hook: 'hook-apps (Ace)', ref: '', where: 'file', file: 'vendors/ace-editor/ace.js', all: ['setTheme\\s*=\\s*function', 'ace/virtual_renderer'] },
+	{ id: 'RichText-onLoad', hook: 'hook-apps (HtmlEditor)', ref: '', where: 'file', file: 'javascript/dijit/_editor/RichText.js', all: ['define\\("dijit/_editor/RichText"', 'onLoad:function\\('] }
 ];
 
 const exists = (p) => {
@@ -396,12 +396,18 @@ export async function buildReport(opts) {
 	const overridesFile = opts.overrides ? path.resolve(opts.overrides) : P.overrides;
 	const overridesCss = overridesFile && isFile(overridesFile) ? C.readTextNoBom(overridesFile).text : null;
 	const dmTodo = overridesCss ? (overridesCss.match(/DM-TODO/g) || []).length : null;
-	R.sections.unmapped = cov ? { source: covFile, ...cov, dmTodoComments: dmTodo } : { skipped: `no ${covFile} (G1 not run yet)`, dmTodoComments: dmTodo };
+	R.sections.unmapped = cov ? { source: covFile, ...cov, dmTodoComments: dmTodo } : { skipped: `no ${covFile} (gen-overrides not run yet)`, dmTodoComments: dmTodo };
 	if (overridesCss) {
 		const idx = addJsStyleSources(indexSourceCss(target, snapshot), target, snapshot, overridesCss);
 		const hand = new Set();
 		const exc = readJson(path.join(C.KIT_DIR, 'exceptions', 'overrides.json'));
-		for (const r of (exc && exc.rules) || []) {
+		const handRules = [...((exc && exc.rules) || [])];
+		const anchorsDir = path.join(C.KIT_DIR, 'anchors');
+		for (const n of fs.existsSync(anchorsDir) ? fs.readdirSync(anchorsDir) : []) {
+			const an = n.endsWith('.json') ? readJson(path.join(anchorsDir, n)) : null;
+			handRules.push(...((an && an.exceptions && an.exceptions.rules) || []));
+		}
+		for (const r of handRules) {
 			const cssText = typeof r === 'string' ? r : r.css || (r.selector ? r.selector + '{}' : '');
 			const p = C.parseCss(cssText);
 			C.walkRules(p.rules, (rule) => rule.type === 'qualified' && C.selectorsFromToks(cssText, rule.preludeToks).forEach((s) => hand.add(s)));
@@ -409,22 +415,22 @@ export async function buildReport(opts) {
 		}
 		const se = selectorExistence(overridesCss, idx, { handSelectors: hand });
 		R.sections.selectors = { overrides: overridesFile, sourceCssFiles: idx.files.size, sourceCssBytes: idx.bytes, sourceParseErrors: idx.parseErrors, ...se, status: se.missing.length || se.unscoped ? 'FAIL' : 'PASS' };
-	} else R.sections.selectors = { skipped: `no overrides.css (${overridesFile || 'staging'}): G1 not run yet; pass --overrides <css> for a synthetic run`, status: 'SKIPPED' };
+	} else R.sections.selectors = { skipped: `no overrides.css (${overridesFile || 'staging'}): gen-overrides not run yet; pass --overrides <css> for a synthetic run`, status: 'SKIPPED' };
 	const icFile = path.join(staging, 'report', 'coverage-icons.json');
 	const ic = summariseIconCoverage(readJson(icFile));
-	R.sections.icons = ic ? { source: icFile, ...ic } : { skipped: `no ${icFile} (G2 not run yet)` };
+	R.sections.icons = ic ? { source: icFile, ...ic } : { skipped: `no ${icFile} (gen-icons not run yet)` };
 	const listFile = opts.injectList ? path.resolve(opts.injectList) : path.join(C.KIT_DIR, 'lib', 'inject-entrypoints.mjs');
 	const list = extractTargetsFrom(listFile);
 	if (list) {
 		const extra = ['OAuthServer/wwwroot/css/login.min.css', 'OAuthServer/wwwroot/css/login.css'].filter((x) => !list.includes(x));
 		R.sections.injection = { source: listFile, ...injectionStatus(target, list.concat(extra)) };
-	} else R.sections.injection = { skipped: `no TARGETS list in ${listFile} (P1 not run yet); pass --inject-list <v1 inject-entrypoints.mjs>` };
+	} else R.sections.injection = { skipped: `no TARGETS list in ${listFile}` };
 	if (P.sheets && isFile(P.sheets)) {
 		const sheets = C.readJsonFile(P.sheets);
 		const size = fs.statSync(P.sheets).size;
 		const edits = Object.values(sheets).reduce((a, e) => a + (Array.isArray(e) ? e.length : 0), 0);
 		R.sections.sheets = { file: P.sheets, bytes: size, keys: Object.keys(sheets).length, edits, estimate: sheetsEstimate(target, sheets) };
-	} else R.sections.sheets = { skipped: 'no data/sheets.json (G1 not run yet)', estimate: sheetsEstimate(target, {}) };
+	} else R.sections.sheets = { skipped: 'no data/sheets.json (gen-overrides not run yet)', estimate: sheetsEstimate(target, {}) };
 	let anchors = HOOK_ANCHORS;
 	if (opts.hookAnchors) {
 		const extra = C.readJsonFile(path.resolve(opts.hookAnchors));
@@ -454,7 +460,7 @@ export function renderMarkdown(R) {
 	const uCount = u && u.perFile ? Object.values(u.perFile).reduce((a, e) => a + e.count, 0) : null;
 	L.push(`| 1. Unmapped literals (DM-TODO) | ${u.skipped ? 'SKIPPED: ' + mdEsc(u.skipped) : `${uCount} in ${Object.keys(u.perFile).length} files`}${u.dmTodoComments != null ? `; ${u.dmTodoComments} DM-TODO comments in overrides.css` : ''} |`);
 	const se = S.selectors;
-	L.push(`| 2. Selectors exist in this version's CSS (static check i) | ${se.skipped ? 'SKIPPED: ' + mdEsc(se.skipped) : `**${se.status}**: ${se.inFile} in their file, ${se.elsewhere} elsewhere, ${se.missing.length} missing, ${se.exempt.root + se.exempt.inline + se.exempt.hand} exempt, of ${se.total}`} |`);
+	L.push(`| 2. Selectors exist in this version's CSS | ${se.skipped ? 'SKIPPED: ' + mdEsc(se.skipped) : `**${se.status}**: ${se.inFile} in their file, ${se.elsewhere} elsewhere, ${se.missing.length} missing, ${se.exempt.root + se.exempt.inline + se.exempt.hand} exempt, of ${se.total}`} |`);
 	const gapKinds = S.icons.gaps ? Object.entries(S.icons.gaps.reduce((a, g) => ((a[g.kind] = (a[g.kind] || 0) + 1), a), {})).map(([k, n]) => `${k} ${n}`).join(', ') : '';
 	L.push(`| 3. Icon gaps | ${S.icons.skipped ? 'SKIPPED: ' + mdEsc(S.icons.skipped) : S.icons.gaps.length + ' gaps' + (gapKinds ? ` (${mdEsc(gapKinds)})` : '')} |`);
 	const inj = S.injection;
@@ -463,7 +469,7 @@ export function renderMarkdown(R) {
 	const est = sh.estimate;
 	L.push(`| 5. sheets.json | ${sh.skipped ? 'SKIPPED: ' + mdEsc(sh.skipped) : `${(sh.bytes / 1024).toFixed(1)} KiB, ${sh.keys} keys, ${sh.edits} edits`}; estimate: ${est.hits}/${est.withColour} colour-bearing CSS strings mapped (${pct(est.hits, est.withColour)}) |`);
 	const hk = S.hooks;
-	L.push(`| 6. Hook anchors (static check ii) | **${hk.status}**: ${hk.anchors.filter((a) => a.status === 'PASS').length}/${hk.anchors.length} present; bundles ${hk.bundles.live} live / ${hk.bundles.dead} unreachable |`);
+	L.push(`| 6. Hook anchors | **${hk.status}**: ${hk.anchors.filter((a) => a.status === 'PASS').length}/${hk.anchors.length} present; bundles ${hk.bundles.live} live / ${hk.bundles.dead} unreachable |`);
 	L.push('');
 
 	L.push('## 1. Unmapped literals per file (DM-TODO)');
@@ -480,12 +486,12 @@ export function renderMarkdown(R) {
 	L.push('## 2. Selectors');
 	L.push('');
 	if (u && !u.skipped && u.unmatched && u.unmatched.length) {
-		L.push(`### G1 unmatched selectors (${u.unmatched.length})`);
+		L.push(`### Unmatched selectors (${u.unmatched.length})`);
 		L.push('');
 		u.unmatched.slice(0, 200).forEach((x) => L.push(`- \`${mdEsc(clip(x.selector || JSON.stringify(x), 140))}\`${x.file ? ' in `' + mdEsc(x.file) + '`' : ''}`));
 		L.push('');
 	}
-	L.push('### Static check (i): every generated selector exists in the CSS it overrides');
+	L.push('### Every generated selector exists in the CSS it overrides');
 	L.push('');
 	if (se.skipped) L.push(`SKIPPED: ${se.skipped}`);
 	else {
@@ -493,7 +499,7 @@ export function renderMarkdown(R) {
 		L.push('');
 		L.push(`- in the file named by the section comment: ${se.inFile}`);
 		L.push(`- elsewhere in this version's CSS: ${se.elsewhere}`);
-		L.push(`- exempt: ${se.exempt.root} root (\`html\`/\`body\`), ${se.exempt.inline} inline-literal attribute selectors (R4 a), ${se.exempt.hand} hand rules (exceptions/overrides.json)`);
+		L.push(`- exempt: ${se.exempt.root} root (\`html\`/\`body\`), ${se.exempt.inline} inline-literal attribute selectors, ${se.exempt.hand} hand rules (exceptions/overrides.json)`);
 		L.push(`- not dark-scoped (see checks b/l): ${se.unscoped}`);
 		L.push(`- **missing: ${se.missing.length}**`);
 		L.push('');
@@ -536,7 +542,7 @@ export function renderMarkdown(R) {
 	if (sh.skipped) L.push(`SKIPPED: ${sh.skipped}`);
 	else L.push(`\`${sh.file}\`: ${sh.bytes} bytes, ${sh.keys} keys, ${sh.edits} edits.`);
 	L.push('');
-	L.push(`Estimate over ${est.liveBundles} reachable bundles (${est.replaceSyncSites} \`.replaceSync(\` sites): ${est.candidates} distinct CSS-like string literals, ${est.withColour} with a colour literal, **${est.hits} keyed in sheets.json** (${pct(est.hits, est.withColour)}), ${est.withColour - est.hits} not keyed; ${est.composed} colour-bearing templates are composed with \`\${}\` (their runtime text cannot be keyed statically; H1 records them in \`__dm.misses\`). ${sh.skipped ? '' : `${est.keysNotInBundles} sheets.json keys match no static literal (composed at runtime, or stale).`}`);
+	L.push(`Estimate over ${est.liveBundles} reachable bundles (${est.replaceSyncSites} \`.replaceSync(\` sites): ${est.candidates} distinct CSS-like string literals, ${est.withColour} with a colour literal, **${est.hits} keyed in sheets.json** (${pct(est.hits, est.withColour)}), ${est.withColour - est.hits} not keyed; ${est.composed} colour-bearing templates are composed with \`\${}\` (their runtime text cannot be keyed statically; the runtime records them in \`__dm.misses\`). ${sh.skipped ? '' : `${est.keysNotInBundles} sheets.json keys match no static literal (composed at runtime, or stale).`}`);
 	L.push('');
 	L.push('Not every CSS-like literal reaches `replaceSync` (some are lit `css` parts or test strings), so this is an estimate; the runtime truth is `__dm.misses`.');
 	if (est.misses.length) {
@@ -548,7 +554,7 @@ export function renderMarkdown(R) {
 		L.push('</details>');
 	}
 	L.push('');
-	L.push('## 6. Static check (ii): runtime hook anchors');
+	L.push('## 6. Runtime hook anchors');
 	L.push('');
 	L.push(`Reachable bundles: ${hk.bundles.live} of ${hk.bundles.total} (unreachable: ${hk.bundles.deadList.join(', ') || 'none'}). Anchors never key on chunk names.`);
 	L.push('');

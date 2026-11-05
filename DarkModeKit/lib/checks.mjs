@@ -994,7 +994,7 @@ export async function checkA({ target, snapshot, manifest, injectTargets = [] })
 	const c = newCheck('a', 'Injected files minus marker blocks equal their snapshot; snapshot reproduces the shipped file');
 	const snaps = snapshotFiles(snapshot);
 	if (!snaps.length) {
-		c.skipped = `no snapshot files under ${snapshot || '(none)'} (P1 snapshot.mjs not run yet)`;
+		c.skipped = `no snapshot files under ${snapshot || '(none)'} (snapshot.mjs not run yet)`;
 		return finish(c);
 	}
 	const snapSet = new Set(snaps.map((r) => r.toLowerCase()));
@@ -1017,7 +1017,7 @@ export async function checkA({ target, snapshot, manifest, injectTargets = [] })
 		const bomS = sBuf[0] === 0xef && sBuf[1] === 0xbb && sBuf[2] === 0xbf;
 		const bomT = tBuf[0] === 0xef && tBuf[1] === 0xbb && tBuf[2] === 0xbf;
 		if (bomS !== bomT) {
-			c.fails.push(`${rel}: BOM ${bomS ? 'removed' : 'added'} (edge case 18)`);
+			c.fails.push(`${rel}: BOM ${bomS ? 'removed' : 'added'}`);
 			continue;
 		}
 		const sText = sBuf.subarray(bomS ? 3 : 0).toString('utf8');
@@ -1040,13 +1040,13 @@ export async function checkA({ target, snapshot, manifest, injectTargets = [] })
 		if (a !== b) {
 			let k = 0;
 			while (k < a.length && a[k] === b[k]) k++;
-			const crlf = /\r\n/.test(a) && a.replace(/\r\n/g, '') === b.replace(/\r\n|\n/g, '') ? ' (line endings changed: edge case 18)' : '';
+			const crlf = /\r\n/.test(a) && a.replace(/\r\n/g, '') === b.replace(/\r\n|\n/g, '') ? ' (line endings changed)' : '';
 			c.fails.push(`${rel}: differs from snapshot outside the marker blocks at ${lineCol(b, k)}${crlf}: snapshot ${JSON.stringify(a.slice(k, k + 60))} vs target ${JSON.stringify(b.slice(k, k + 60))}`);
 		}
 		if (/\.cshtml$/i.test(rel)) {
 			for (const m of tText.matchAll(/<!-- aras-darkmode:begin (\w+) -->([\s\S]*?)<!-- aras-darkmode:end \1 -->/g)) {
 				const r17 = razorAtIssues(m[2]);
-				r17.fails.forEach((x) => c.fails.push(`${rel}: ${m[1]} block: ${x} (edge case 17)`));
+				r17.fails.forEach((x) => c.fails.push(`${rel}: ${m[1]} block: ${x}`));
 				r17.warns.forEach((x) => c.warns.push(`${rel}: ${m[1]} block: ${x}`));
 			}
 		}
@@ -1054,7 +1054,7 @@ export async function checkA({ target, snapshot, manifest, injectTargets = [] })
 		const sLf = (sText.match(/\n/g) || []).length - sCrlf;
 		const tCrlf = (tText.match(/\r\n/g) || []).length;
 		const tLf = (tText.match(/\n/g) || []).length - tCrlf;
-		if ((sLf === 0 && sCrlf > 0 && tLf > 0) || (sCrlf === 0 && sLf > 0 && tCrlf > 0)) c.fails.push(`${rel}: injection introduced ${sLf === 0 ? 'LF' : 'CRLF'} line breaks into a ${sLf === 0 ? 'CRLF' : 'LF'} file (edge case 18)`);
+		if ((sLf === 0 && sCrlf > 0 && tLf > 0) || (sCrlf === 0 && sLf > 0 && tCrlf > 0)) c.fails.push(`${rel}: injection introduced ${sLf === 0 ? 'LF' : 'CRLF'} line breaks into a ${sLf === 0 ? 'CRLF' : 'LF'} file`);
 	}
 	for (const rel of injectTargets) {
 		if (snapSet.has(rel.toLowerCase())) continue;
@@ -1122,7 +1122,7 @@ export function analyseCss(css, opts) {
 				const dn = d.name.toLowerCase();
 				if (!dark) {
 					if (dn.startsWith('--dm-')) res.fails.push(`${where}: ${d.name} defined outside dark`);
-					else if (dn.startsWith('--') && isLegacyName(d.name, legacy)) res.fails.push(`${where}: legacy ${d.name} redefined outside dark (edge case 5)`);
+					else if (dn.startsWith('--') && isLegacyName(d.name, legacy)) res.fails.push(`${where}: legacy ${d.name} redefined outside dark`);
 					else if (dn.startsWith('--')) res.warns.push(`${where}: custom property ${d.name} defined outside dark`);
 					if (dn === 'color-scheme') res.fails.push(`${where}: unscoped color-scheme: ${d.value}`);
 					for (const v of findDmVars(d.value)) if (v.fallback === null) res.fails.push(`${where}: var(${v.name}) without fallback outside dark resolves to nothing in light`);
@@ -1136,8 +1136,8 @@ export function analyseCss(css, opts) {
 		const residue = stripCssComments(dropDarkRulesRegex(css)).replace(/@charset[^;]*;/g, '').trim();
 		const unscoped = res.rules.filter((r) => !r.dark).length;
 		res.stats.regexResidueChars = residue.length;
-		if (residue && !unscoped && !res.fails.length) res.infos.push(`${file}: v1 regex strip leaves ${residue.length} chars (multi-line/nested shapes the regex cannot see; tokenizer verdict stands): ${clip(residue, 80)}`);
-		if (!residue && unscoped) res.fails.push(`${file}: tokenizer found ${unscoped} unscoped rule(s) that the v1 regex missed`);
+		if (residue && !unscoped && !res.fails.length) res.infos.push(`${file}: regex strip leaves ${residue.length} chars (multi-line/nested shapes the regex cannot see; tokenizer verdict stands): ${clip(residue, 80)}`);
+		if (!residue && unscoped) res.fails.push(`${file}: tokenizer found ${unscoped} unscoped rule(s) that the regex missed`);
 	}
 	return res;
 }
@@ -1338,7 +1338,7 @@ export function checkB({ target, staging, legacy, anchors, recover = true }) {
 		let source = '';
 		if (P.originals && isFile(P.originals)) {
 			originals = readJsonFile(P.originals);
-			source = 'report/sheets-originals.json (G1)';
+			source = 'report/sheets-originals.json (gen-overrides)';
 		} else if (recover && target) {
 			const r = recoverOriginals(target, Object.keys(sheets));
 			originals = r.originals;
@@ -1405,7 +1405,7 @@ export const KIT_OUTPUT = [/^Innovator\/Client\/darkmode\//i, /^Innovator\/Clien
 export async function checkD({ target, snapshot, manifest, walkNew = true, concurrency = 16 }) {
 	const c = newCheck('d', 'Vendor files unchanged against the snapshot manifest (only marker injections + filesRevision)');
 	if (!manifest) {
-		c.skipped = `no ${snapshot ? path.join(snapshot, 'manifest.json') : '<snapshot>/manifest.json'} (P1 snapshot.mjs not run yet)`;
+		c.skipped = `no ${snapshot ? path.join(snapshot, 'manifest.json') : '<snapshot>/manifest.json'} (snapshot.mjs not run yet)`;
 		return finish(c);
 	}
 	const injected = new Set(snapshotFiles(snapshot).map((r) => r.toLowerCase()));
@@ -1436,7 +1436,7 @@ export async function checkD({ target, snapshot, manifest, walkNew = true, concu
 			if (VOLATILE.some((re) => re.test(rel))) volatile.push(rel);
 			else {
 				changed++;
-				cap(c.fails, `${rel}: vendor file changed${/^Innovator\/Client\/jsBundles\//i.test(rel) ? ' (jsBundles: edge cases 14/15)' : ''}`);
+				cap(c.fails, `${rel}: vendor file changed${/^Innovator\/Client\/jsBundles\//i.test(rel) ? ' (jsBundles)' : ''}`);
 			}
 		}
 	});
@@ -1470,7 +1470,7 @@ export async function checkD({ target, snapshot, manifest, walkNew = true, concu
 		for (const rel of candidates) {
 			if (known.has(rel.toLowerCase()) || KIT_OUTPUT.some((re) => re.test(rel)) || VOLATILE.some((re) => re.test(rel))) continue;
 			added++;
-			const msg = `${rel}: new file in a vendor folder${/jsBundles\/chunk-/i.test(rel) ? ' (stale chunk from a rebuild? edge case 14)' : ''}`;
+			const msg = `${rel}: new file in a vendor folder${/jsBundles\/chunk-/i.test(rel) ? ' (stale chunk from a rebuild?)' : ''}`;
 			if (/\.(js|mjs|ts|css|less|cshtml|html?|aspx|config|json|xml)$/i.test(rel)) cap(c.fails, msg);
 			else cap(c.warns, msg);
 		}
@@ -1518,7 +1518,7 @@ function findVarInJson(obj, pathStr, out, skipTop) {
 		}
 }
 export function checkE({ target, staging }) {
-	const c = newCheck('e', 'No var( in any JS/JSON data the kit emits (edge case 3)');
+	const c = newCheck('e', 'No var( in any JS/JSON data the kit emits');
 	const P = stagingPaths(staging, target);
 	let checked = 0;
 	if (P.dataDir && exists(P.dataDir)) {

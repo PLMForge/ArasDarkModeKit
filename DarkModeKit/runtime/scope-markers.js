@@ -36,6 +36,11 @@
 				checks.push({ t: t, eq: m[1] });
 				continue;
 			}
+			m = /^url:(.+)$/.exec(s);
+			if (m) {
+				checks.push({ t: t, path: m[1].toLowerCase() });
+				continue;
+			}
 			checks.push({ t: t, sel: s });
 		}
 	} catch (e) {
@@ -74,6 +79,13 @@
 			} else if (k.eq !== undefined) {
 				for (var b = 0; b < hrefs.length && !hit; b++) {
 					hit = hrefs[b] === k.eq;
+				}
+			} else if (k.path !== undefined) {
+				try {
+					var p = String((doc.location && doc.location.pathname) || '').toLowerCase();
+					hit = p.length >= k.path.length && p.lastIndexOf(k.path) === p.length - k.path.length;
+				} catch (e) {
+					hit = false;
 				}
 			} else {
 				try {

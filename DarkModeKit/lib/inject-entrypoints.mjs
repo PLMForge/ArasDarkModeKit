@@ -413,8 +413,8 @@ export function run(args) {
 		else {
 			const base = stripV1Blocks(stripKitBlocks(text));
 			if (hasV1Reference(base)) {
-				result.errors.push({ rel: t, error: 'v1 dark-mode reference outside v1 marker blocks' });
-				log.error(`${t}: v1 dark-mode reference outside v1 marker blocks; fix by hand`);
+				result.errors.push({ rel: t, error: 'reference to an earlier dark mode outside its marker blocks' });
+				log.error(`${t}: reference to an earlier dark mode outside its marker blocks; fix by hand`);
 				continue;
 			}
 			const r = injectHtml(t, base, hashes);
@@ -430,7 +430,7 @@ export function run(args) {
 			result.unchanged++;
 			continue;
 		}
-		const kind = uninstall ? 'removed' : hadKit ? 'updated' : hadV1 ? 'replaced-v1' : 'patched';
+		const kind = uninstall ? 'removed' : hadKit ? 'updated' : hadV1 ? 'replaced-earlier' : 'patched';
 		writeFile(file, t, encodeText(next, bom));
 		result.changed.push({ rel: t, kind });
 		result.written++;
@@ -477,11 +477,11 @@ export function run(args) {
 		for (const s of touchedSources) {
 			if (after.actual[s] !== freshBefore.actual[s]) {
 				result.errors.push({ rel: s, error: `max mtime of ${s} moved ${freshBefore.actual[s]} -> ${after.actual[s]}; jsBundles/data.json is now stale` });
-				log.error(`edge case 15: max mtime of ${s} moved; Aras will recompile bundles on the next app start`);
+				log.error(`max mtime of ${s} moved; Aras will recompile bundles on the next app start`);
 			}
 		}
 		if (!freshBefore.fresh) log.warn(`jsBundles/data.json was already stale before injection (recorded ${JSON.stringify(freshBefore.recorded)}, actual ${JSON.stringify(freshBefore.actual)}): Aras will run build.js on the next app start regardless of the kit`);
-		else log.info(`edge case 15: data.json ${after.fresh ? 'still fresh' : 'STALE'} after ${dryRun ? '(dry run)' : 'writes'} under ${[...new Set(Object.keys(preMax))].join(', ')}`);
+		else log.info(`data.json ${after.fresh ? 'still fresh' : 'STALE'} after ${dryRun ? '(dry run)' : 'writes'} under ${[...new Set(Object.keys(preMax))].join(', ')}`);
 	}
 
 	log.info(`${result.mode}${dryRun ? ' (dry run)' : ''}: ${result.found}/${result.targets} entry points found, ${result.written} file(s) ${dryRun ? 'pending' : 'written'}, ${result.unchanged} unchanged, ${result.missing.length} missing, ${result.errors.length} error(s)`);

@@ -97,7 +97,7 @@ async function deriveTokens(A, adaptForDark) {
 			}
 		} catch (e) {  }
 	}
-	return { ...localDerive(A, adaptForDark), source: 'local port of the R3 derive()' };
+	return { ...localDerive(A, adaptForDark), source: 'local derive()' };
 }
 
 const COLOR_RE = /#[0-9a-fA-F]{8}\b|#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b|rgba?\([^()]*\)|\b(?:white|black|transparent)\b/g;
@@ -318,7 +318,7 @@ export async function genLogin(opts) {
 					entry.how = 'no light declaration in this version: skipped';
 				} else if (v1Light && !sameColors(L.value, v1Light)) {
 					const mv = mapValue(L.prop, L.value);
-					entry.how = `light differs (${L.value} vs v1 ${v1Light}): ${mv ? 'mapped literal' : 'kept (already reads on dark)'}`;
+					entry.how = `light differs (${L.value} vs reference ${v1Light}): ${mv ? 'mapped literal' : 'kept (already reads on dark)'}`;
 					if (mv) line = `${L.prop}: ${mv}; /* mapped from ${L.value.replace(/\*\//g, '')} */`;
 				} else if (!tokenDark) {
 					entry.how = 'token not derived for this version: skipped';

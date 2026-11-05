@@ -132,6 +132,70 @@
  "pins": {
   "ramp": {}
  },
+ "exceptions": {
+  "layers": {
+   "where": [
+    "/styles/formElements[.]css$"
+   ]
+  },
+  "roles": [
+   {
+    "file": "/styles/common[.]css$",
+    "selectorRe": "aras-grid-row(:hover|_hovered)",
+    "prop": "^box-shadow$",
+    "literal": "#ffffff",
+    "token": "--surface",
+    "alpha": true
+   },
+   {
+    "file": "/styles/common[.]css$",
+    "selectorRe": "aras-grid-row",
+    "literal": "#fefbd5",
+    "token": "MIX:--search-match-2 52%"
+   },
+   {
+    "file": "/styles/common[.]css$",
+    "selectorRe": "aras-grid-row",
+    "literal": "#f4eda8",
+    "token": "--search-match-2"
+   }
+  ],
+  "inlineLiterals": [
+   {
+    "site": "cui RelatedItemTypeGridPlugin related cell background (14.0.25)",
+    "element": "",
+    "prop": "--row-cell-bg",
+    "literals": [
+     "#f7f7f7"
+    ],
+    "token": "--neutral-f7"
+   },
+   {
+    "site": "cui RelatedItemTypeGridPlugin read-only cell background (14.0.25)",
+    "element": "",
+    "prop": "--row-cell-bg",
+    "literals": [
+     "#eee"
+    ],
+    "token": "--neutral-e"
+   },
+   {
+    "site": "cui RelatedItemTypeGridPlugin related cell border (14.0.25)",
+    "element": "",
+    "prop": "border-color",
+    "literals": [
+     "#cccccc"
+    ],
+    "token": "--neutral-c"
+   }
+  ],
+  "rules": [
+   {
+    "selector": ".aras-field-xclasses-legend-wrapper > span:is([style*=\"color:#333333\" i], [style*=\"color: #333333\" i], [style*=\"color:#444444\" i], [style*=\"color: #444444\" i], [style*=\"color:#000000\" i], [style*=\"color:black\" i], [style*=\"color: rgb(51, 51, 51)\"], [style*=\"color: rgb(68, 68, 68)\"], [style*=\"color: rgb(0, 0, 0)\"])",
+    "decls": "color: var(--dm-text) !important"
+   }
+  ]
+ },
  "assertChecks": false,
  "shadows": {
   "--shadow-a": "0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.16)",

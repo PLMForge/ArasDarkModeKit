@@ -30,6 +30,23 @@ export function loadAnchors(file) {
 	return out;
 }
 
+export function scopeExceptions(ex, A) {
+	const applies = (o) => !o || typeof o !== 'object' || !Array.isArray(o.anchors) || o.anchors.includes(A.version);
+	const add = (k, base, v) => {
+		if (Array.isArray(v)) return k === 'roles' ? [...v, ...(base || [])] : [...(base || []), ...v];
+		if (v && typeof v === 'object' && base && typeof base === 'object' && !Array.isArray(base)) {
+			const o = { ...base };
+			for (const [kk, vv] of Object.entries(v)) if (!kk.startsWith('_')) o[kk] = add(kk, base[kk], vv);
+			return o;
+		}
+		return v;
+	};
+	const out = {};
+	for (const [k, v] of Object.entries(ex || {})) out[k] = Array.isArray(v) ? v.filter(applies) : v;
+	for (const [k, v] of Object.entries(A.exceptions || {})) if (!k.startsWith('_')) out[k] = add(k, out[k], v);
+	return out;
+}
+
 export function derive(A, { formulaOnly = false } = {}) {
 	const S = norm(A.surface.dark), SL = norm(A.surface.light || '#ffffff');
 	const pin = (group, light) => {
@@ -171,6 +188,7 @@ export function createMapper(A, D, ex = {}) {
 		lit: o.literal ? norm(o.literal) : null,
 		token: o.token,
 		keep: !!o.keep,
+		alpha: !!o.alpha,
 		policy: o.policy || null
 	}));
 	const roleOverride = (h, ctx) => {
@@ -182,7 +200,7 @@ export function createMapper(A, D, ex = {}) {
 			if (o.selRe && !o.selRe.test(ctx.sel || '')) continue;
 			if (o.prop && !o.prop.test(ctx.prop || '')) continue;
 			if (o.policy && o.policy !== ctx.policy) continue;
-			return o.keep ? 'KEEP' : o.token;
+			return o.keep ? 'KEEP' : o.alpha ? { alpha: o.token } : o.token;
 		}
 		return null;
 	};
@@ -219,7 +237,7 @@ export function createMapper(A, D, ex = {}) {
 		const sel = ctx.sel || '';
 		const ov = roleOverride(h, ctx);
 		if (ov === 'KEEP') return null;
-		if (ov) return { ...tok(ov), via: 'exception' };
+		if (ov) return { ...tok(ov.alpha || ov), via: 'exception' };
 		const neutral = rgbChroma(c) <= 24;
 		const v = (c.r + c.g + c.b) / 3;
 		const last = lastCompound(sel);
@@ -333,7 +351,8 @@ export function createMapper(A, D, ex = {}) {
 			const h = toHex6(c);
 			const ov = roleOverride(h, ctx);
 			if (ov === 'KEEP') return null;
-			if (ov) return { ...tok(ov), via: 'exception (opaque, v1 OVERRIDES semantics)' };
+			if (ov && ov.alpha) return mixA({ ...tok(ov.alpha), via: 'exception (alpha kept)' }, c.a);
+			if (ov) return { ...tok(ov), via: 'exception (opaque)' };
 			const neutral = rgbChroma(c) <= 24, v = (c.r + c.g + c.b) / 3;
 			if (role === 'shadow' && ctx.policy === 'less' && ex.lessKeepOthers !== false) return null;
 			if (role === 'shadow') {
@@ -526,13 +545,13 @@ async function main() {
 	const D = derive(A, { formulaOnly: !!args.formulaOnly });
 	if (args.compare) {
 		const r = compareV1(D, args.compare);
-		log.info(`compare with v1: ${r.v1Tokens} v1 tokens, ${r.diffs.length} differences`);
-		for (const d of r.diffs) log.info(`  DIFF ${d.token}: derived=${d.derived} v1=${d.v1}`);
+		log.info(`compare: ${r.v1Tokens} reference tokens, ${r.diffs.length} differences`);
+		for (const d of r.diffs) log.info(`  DIFF ${d.token}: derived=${d.derived} reference=${d.v1}`);
 		if (r.diffs.length) process.exitCode = 1;
 	}
 	const assert = A.assertChecks !== false;
 	for (const r of contrastTable(A, D)) {
-		const tag = r.want == null ? '' : assert ? ` (want ${r.want}) ${r.ok ? 'OK' : 'FAIL'}` : ` (2025 v1: ${r.want}, delta ${(r.value - r.want >= 0 ? '+' : '') + (r.value - r.want).toFixed(2)})`;
+		const tag = r.want == null ? '' : assert ? ` (want ${r.want}) ${r.ok ? 'OK' : 'FAIL'}` : ` (2025 reference: ${r.want}, delta ${(r.value - r.want >= 0 ? '+' : '') + (r.value - r.want).toFixed(2)})`;
 		log.info(`  ${r.name.padEnd(28)} ${r.value == null ? 'n/a' : r.value.toFixed(2)}${tag}  ${r.fg || ''} on ${r.bg || ''}`);
 		if (assert && r.want != null && !r.ok) process.exitCode = 1;
 	}

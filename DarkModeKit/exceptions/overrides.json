@@ -73,7 +73,7 @@
   ]
  },
  "bundlePolicy": "less",
- "lessKeepOthers": true,
+ "lessKeepOthers": false,
  "lessSemantic": {
   "bg": "^--(selection|highlight-row|search-match-[123]|required-bg|error-subtle|primary|secondary|error|success|warning)$",
   "text": "^--(error-text|success-text|warning-text|link|calendar-today|text-disabled)$",
@@ -309,6 +309,9 @@
    "token": "--focus"
   },
   {
+   "anchors": [
+    "14.35"
+   ],
    "file": "/styles/main\\.css$",
    "selectorRe": "\\.aras-navigation-panel-tabs",
    "prop": "^background",
@@ -325,6 +328,38 @@
    "prop": "^(color|caret-color|fill)$",
    "literal": "#1b1b98",
    "token": "--primary-text"
+  },
+  {
+   "file": "/styles/common\\.css$",
+   "selectorRe": "\\.aras-btn_secondary(_cancel)?:disabled",
+   "prop": "^color$",
+   "literal": "#e8e8e8",
+   "token": "--text-disabled"
+  },
+  {
+   "file": "claroGrid\\.css$",
+   "prop": "^background",
+   "literal": "#9dcfff",
+   "token": "--highlight-row"
+  },
+  {
+   "file": "claroGrid\\.css$",
+   "prop": "^background",
+   "literal": "#93cafe",
+   "token": "--selection"
+  },
+  {
+   "file": "claroGrid\\.css$",
+   "prop": "^background",
+   "literal": "#f8b8b6",
+   "token": "--error-subtle"
+  },
+  {
+   "file": "claro\\.css$",
+   "selectorRe": "dijitTimePickerItemSelected",
+   "prop": "^background",
+   "literal": "#b7cdee",
+   "token": "--selection"
   },
   {
    "file": "EditorViewPanel|elementsTree|TDF/Styles/EditorView\\.css$",
@@ -386,18 +421,38 @@
  ],
  "rules": [
   {
+   "selector": "#formsPanel",
+   "decls": "border-bottom-color: var(--dm-border-subtle)"
+  },
+  {
+   "selector": "#formsPanel > #container, #formsPanel #container",
+   "decls": "border-left-color: var(--dm-border-subtle)"
+  },
+  {
+   "anchors": [
+    "14.35"
+   ],
    "selector": ".aras-navigation-panel-tabs .aras-tabs__tab:not(.aras-navigation-panel-tabs__content-tab):not(.aras-tabs__tab_active) .aras-tabs__icon",
    "decls": "background-color: var(--dm-surface-raised)"
   },
   {
+   "anchors": [
+    "14.35"
+   ],
    "selector": ".aras-navigation-panel-tabs .aras-tabs__tab:not(.aras-tabs__tab_active):hover",
    "decls": "background-color: var(--dm-gray400, var(--dm-border-subtle))"
   },
   {
+   "anchors": [
+    "14.35"
+   ],
    "selector": ".aras-navigation-panel-tabs .aras-tabs__tab:not(.aras-tabs__tab_active):active",
    "decls": "background-color: var(--dm-gray500, var(--dm-border-subtle))"
   },
   {
+   "anchors": [
+    "14.35"
+   ],
    "selector": ".aras-navigation-panel-tabs .aras-tabs__tab_active, .aras-navigation-panel-tabs .aras-navigation-panel-tabs__content-tab.aras-tabs__tab:focus-visible",
    "decls": "background-color: var(--dm-selection)"
   },

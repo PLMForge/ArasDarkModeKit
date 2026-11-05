@@ -153,7 +153,7 @@ export async function loadColorLib() {
 					catch { return false; }
 				});
 				if (same) return { adaptForDark: (c, o) => norm(m.adaptForDark(c, o)), source: 'lib/color.mjs' };
-				return { adaptForDark: localAdaptForDark, source: 'local (lib/color.mjs adaptForDark differs from v1 on probe colours)' };
+				return { adaptForDark: localAdaptForDark, source: 'local (lib/color.mjs adaptForDark gives different results on probe colours)' };
 			}
 		}
 	} catch (e) {
@@ -808,7 +808,7 @@ export async function genIcons(opts) {
 			cssFilesWithRasterUrls: Object.fromEntries([...rasterRefs].sort()),
 			moduleSvgFoldersNotCovered: moduleSvgDirs,
 			notCovered: [
-				'Modules/*/images (Viewers, CMF, QueryBuilder, SSVC): not recoloured (same as v1)',
+				'Modules/*/images (Viewers, CMF, QueryBuilder, SSVC): not recoloured',
 				'GraphView <image href> set from data',
 				'raster images (png/gif) and claro sprites',
 				'aras-image <img> fallback inside its shadow root: needs hook-components.js (data/icons.json files map)'

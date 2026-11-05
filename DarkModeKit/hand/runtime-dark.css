@@ -100,3 +100,8 @@ html[data-theme="dark"] body[bgcolor="#ffffff" i] {
 	background-color: var(--dm-surface);
 	color: var(--dm-text);
 }
+
+html[data-theme="dark"] .claro .dojoxGridExpandoNode,
+html[data-theme="dark"] .claro .dijitTreeExpando {
+	filter: invert(1) hue-rotate(180deg);
+}
