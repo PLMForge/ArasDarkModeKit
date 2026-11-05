@@ -2,6 +2,13 @@
 
 A dark theme for Aras Innovator. Light mode is left as it is; each user picks a theme in the user menu.
 
+Aras Innovator 2025 with the dark theme applied:
+
+| | |
+|:---:|:---:|
+| ![Part item view with its BOM](images/part-bom.jpg)<br>Part with its BOM | ![Express ECO form with its Impact Matrix](images/express-eco.jpg)<br>Express ECO with its Impact Matrix |
+| ![ItemType form with its Properties grid](images/itemtype-form.jpg)<br>ItemType form (administration) | ![Life Cycle Map editor](images/lifecycle-map.jpg)<br>Life Cycle Map editor |
+
 ## Tested versions
 
 | Aras Innovator | Client version | Browser |
