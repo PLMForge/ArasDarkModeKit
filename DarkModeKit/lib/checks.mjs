@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import * as util from './util.mjs';
+import { entryPoints } from './inject-entrypoints.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const KIT_DIR = path.resolve(HERE, '..');
@@ -1631,7 +1632,13 @@ export function checkLightIdentity({ target, staging, legacy }) {
 	return finish(c);
 }
 
-export function injectTargets(target) {
+export function injectTargets(target, anchorsFile) {
+	const it = injectTargetsStatic(target);
+	if (!it || !anchorsFile) return it;
+	const extra = entryPoints(anchorsFile).added.map((t) => 'Innovator/Client/' + t).filter((r) => !it.list.includes(r));
+	return extra.length ? { ...it, list: [...it.list, ...extra], added: extra } : it;
+}
+function injectTargetsStatic(target) {
 	const p1 = path.join(KIT_DIR, 'lib', 'inject-entrypoints.mjs');
 	const lists = [];
 	const extract = (file, prefix) => {
@@ -1660,7 +1667,7 @@ export async function runChecks(opts) {
 	const legacy = legacyNames(anchorFiles);
 	const anchors = opts.anchors ? loadAnchors(path.resolve(opts.anchors)) : null;
 	const manifest = snapshot ? loadManifest(snapshot, target) : null;
-	const it = injectTargets(target);
+	const it = injectTargets(target, opts.anchors ? path.resolve(opts.anchors) : null);
 	const results = { target, snapshot, staging, anchors: anchors ? anchors._file : null, legacyNames: legacy.size, node: process.version, checks: {} };
 	if (want('a')) results.checks.a = await checkA({ target, snapshot, manifest, injectTargets: it ? it.list : [] });
 	let b = null;

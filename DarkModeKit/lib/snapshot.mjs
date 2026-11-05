@@ -19,7 +19,7 @@ import {
 	isMain,
 	abs
 } from './util.mjs';
-import { kitWrittenVendorFiles, CLIENT_CONFIG } from './inject-entrypoints.mjs';
+import { kitWrittenVendorFiles, entryPoints, CLIENT_CONFIG } from './inject-entrypoints.mjs';
 
 const log = createLogger('snapshot');
 export const SCHEMA = 'aras-darkmode-snapshot/1';
@@ -40,14 +40,14 @@ function normaliseForCompare(rel, text) {
 	return t;
 }
 
-export function takeSnapshot({ target, snapshot, vendor = true }) {
+export function takeSnapshot({ target, snapshot, vendor = true, targets }) {
 	const manifestFile = path.join(snapshot, 'manifest.json');
 	const manifest = readJson(manifestFile, null) || { schema: SCHEMA, created: new Date().toISOString(), target, files: {}, vendor: {} };
 	manifest.files = manifest.files || {};
 	manifest.vendor = manifest.vendor || {};
 	const res = { snapshot, added: [], reconstructed: [], ok: 0, stale: [], errors: [], missing: [], vendorAdded: 0, vendorTotal: 0 };
 
-	for (const rel of kitWrittenVendorFiles()) {
+	for (const rel of kitWrittenVendorFiles(targets)) {
 		const file = abs(target, rel);
 		if (!fs.existsSync(file)) {
 			res.missing.push(rel);
@@ -114,7 +114,8 @@ if (isMain(import.meta.url)) {
 		const args = parseArgs();
 		const target = path.resolve(requireArg(args, 'target'));
 		const snapshot = args.snapshot ? path.resolve(args.snapshot) : defaultSnapshotDir(target);
-		const res = takeSnapshot({ target, snapshot, vendor: !args.noVendor });
+		const targets = entryPoints(args.anchors && args.anchors !== true ? args.anchors : null).targets;
+		const res = takeSnapshot({ target, snapshot, vendor: !args.noVendor, targets });
 		if (args.verbose) for (const r of res.reconstructed) log.info(`reconstructed pristine ${r} (marker blocks stripped)`);
 		for (const r of res.stale) log.error(`${r} differs from its snapshot beyond the kit's own edits: vendor update? Delete ${snapshot} and re-run to re-snapshot.`);
 		for (const e of res.errors) log.error(`${e.rel}: ${e.error}`);

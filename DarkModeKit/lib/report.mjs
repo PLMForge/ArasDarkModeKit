@@ -421,6 +421,7 @@ export async function buildReport(opts) {
 	R.sections.icons = ic ? { source: icFile, ...ic } : { skipped: `no ${icFile} (gen-icons not run yet)` };
 	const listFile = opts.injectList ? path.resolve(opts.injectList) : path.join(C.KIT_DIR, 'lib', 'inject-entrypoints.mjs');
 	const list = extractTargetsFrom(listFile);
+	if (list && opts.anchors) for (const t of C.injectTargets(target, path.resolve(opts.anchors))?.added || []) if (!list.includes(t)) list.push(t);
 	if (list) {
 		const extra = ['OAuthServer/wwwroot/css/login.min.css', 'OAuthServer/wwwroot/css/login.css'].filter((x) => !list.includes(x));
 		R.sections.injection = { source: listFile, ...injectionStatus(target, list.concat(extra)) };
@@ -666,7 +667,7 @@ async function main() {
 		console.error('usage: node lib/report.mjs --target <root> [--staging <dir>] [--snapshot <dir>] --out <dir> [--overrides <css>] [--hook-anchors <json>] [--inject-list <mjs>] [--strict]');
 		process.exit(2);
 	}
-	const R = await buildReport({ target: args.target, staging: args.staging, snapshot: args.snapshot, overrides: args.overrides, hookAnchors: args.hookAnchors, injectList: args.injectList, version: args.version });
+	const R = await buildReport({ target: args.target, staging: args.staging, snapshot: args.snapshot, overrides: args.overrides, hookAnchors: args.hookAnchors, injectList: args.injectList, anchors: args.anchors && args.anchors !== true ? args.anchors : null, version: args.version });
 	const out = path.resolve(args.out);
 	fs.mkdirSync(out, { recursive: true });
 	const md = renderMarkdown(R);

@@ -97,7 +97,7 @@ if ($det.nearest) { Warn "no anchors for $($det.version): using nearest $($det.a
 $Anchors = $det.anchors
 
 Say '[snapshot]' 'Cyan'
-if ((Invoke-Node @((Join-Path $Lib 'snapshot.mjs'), '--target', $Target, '--snapshot', $Snapshot, '--result', (Join-Path $Report 'snapshot.json'))) -ne 0) {
+if ((Invoke-Node @((Join-Path $Lib 'snapshot.mjs'), '--target', $Target, '--snapshot', $Snapshot, '--anchors', $Anchors, '--result', (Join-Path $Report 'snapshot.json'))) -ne 0) {
 	Die 'snapshot failed (see above); nothing was written to the target'
 }
 
@@ -135,7 +135,7 @@ if ((Invoke-Node $asmArgs) -ne 0) { Die 'assemble failed' }
 $asm = Read-Json (Join-Path $Report 'assemble.json')
 
 Say '[inject]' 'Cyan'
-$injArgs = @((Join-Path $Lib 'inject-entrypoints.mjs'), '--target', $Target, '--staging', $Staging, '--result', (Join-Path $Report 'inject.json'))
+$injArgs = @((Join-Path $Lib 'inject-entrypoints.mjs'), '--target', $Target, '--staging', $Staging, '--anchors', $Anchors, '--result', (Join-Path $Report 'inject.json'))
 if ($DryRun) { $injArgs += '--dry-run' }
 if ($Uninstall) { $injArgs += '--uninstall' }
 $injRc = Invoke-Node $injArgs

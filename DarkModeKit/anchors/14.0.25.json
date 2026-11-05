@@ -133,6 +133,14 @@
   "ramp": {}
  },
  "exceptions": {
+  "entryPoints": {
+   "add": [
+    "scripts/promoteDialog.html"
+   ],
+   "ignore": [
+    "Modules/aras.innovator.ExtendedClassification/Views/propertySelectionDialog.html"
+   ]
+  },
   "layers": {
    "where": [
     "/styles/formElements[.]css$"

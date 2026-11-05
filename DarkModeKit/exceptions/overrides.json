@@ -421,6 +421,13 @@
  ],
  "rules": [
   {
+   "selector": ".claro #bottom",
+   "decls": [
+    "background-color: var(--dm-surface-raised)",
+    "color: var(--dm-text-secondary)"
+   ]
+  },
+  {
    "selector": "#formsPanel",
    "decls": "border-bottom-color: var(--dm-border-subtle)"
   },

@@ -19,8 +19,10 @@ import {
 	MARK,
 	CLIENT_REL,
 	defaultStagingDir,
-	isMain
+	isMain,
+	KIT_DIR
 } from './util.mjs';
+import { loadAnchors, scopeExceptions } from './derive-palette.mjs';
 
 const log = createLogger('inject');
 
@@ -148,8 +150,21 @@ export const TARGETS = [
 export const OAUTH_TARGETS = ['OAuthServer/wwwroot/css/login.min.css', 'OAuthServer/wwwroot/css/login.css'];
 export const CLIENT_CONFIG = 'Innovator/Client/InnovatorClient.config';
 
-export function kitWrittenVendorFiles() {
-	return [...TARGETS.map((t) => `${CLIENT_REL}/${t}`), CLIENT_CONFIG, ...OAUTH_TARGETS];
+export function entryPoints(anchorsFile, exceptionsFile) {
+	if (!anchorsFile) return { targets: TARGETS, added: [], ignore: [] };
+	const exFile = exceptionsFile || path.join(KIT_DIR, 'exceptions', 'overrides.json');
+	const EX = scopeExceptions(fs.existsSync(exFile) ? readJson(exFile) : {}, loadAnchors(path.resolve(anchorsFile)));
+	return entryPointsFromExceptions(EX);
+}
+export function entryPointsFromExceptions(EX) {
+	const ep = (EX && EX.entryPoints) || {};
+	const norm = (p) => String(p).replace(/\\/g, '/').replace(/^\/+/, '');
+	const added = [...new Set((ep.add || []).map(norm))].filter((t) => !TARGETS.includes(t));
+	return { targets: [...TARGETS, ...added], added, ignore: (ep.ignore || []).map(norm) };
+}
+
+export function kitWrittenVendorFiles(targets = TARGETS) {
+	return [...targets.map((t) => `${CLIENT_REL}/${t}`), CLIENT_CONFIG, ...OAUTH_TARGETS];
 }
 
 const EXCLUDE = [
@@ -346,12 +361,14 @@ export function run(args) {
 	const dryRun = !!args.dryRun;
 	const uninstall = !!args.uninstall;
 	const verbose = !!args.verbose;
-	const result = { mode: uninstall ? 'uninstall' : 'apply', dryRun, target, targets: TARGETS.length, found: 0, missing: [], changed: [], unchanged: 0, errors: [], written: 0, oauth: [], untargeted: [], bundleFreshness: null };
+	const EP = entryPoints(args.anchors && args.anchors !== true ? args.anchors : null);
+	const result = { mode: uninstall ? 'uninstall' : 'apply', dryRun, target, targets: EP.targets.length, added: EP.added, found: 0, missing: [], changed: [], unchanged: 0, errors: [], written: 0, oauth: [], untargeted: [], bundleFreshness: null };
 
 	if (args.discover) {
-		const targets = new Set(TARGETS);
+		const targets = new Set(EP.targets);
+		const ignore = new Set(EP.ignore);
 		for (const rel of walkFiles(clientDir, { skipDirs: DISCOVER_SKIP_DIRS }).filter((r) => /\.(html?|cshtml)$/i.test(r))) {
-			if (targets.has(rel) || EXCLUDE.some((re) => re.test(rel)) || /^(vendors|jsBundles|nodejs|WebHelp|docs|node_modules|temp|logs|bin|App_Data|BrowserCode)\//.test(rel)) continue;
+			if (targets.has(rel) || ignore.has(rel) || EXCLUDE.some((re) => re.test(rel)) || /^(vendors|jsBundles|nodejs|WebHelp|docs|node_modules|temp|logs|bin|App_Data|BrowserCode)\//.test(rel)) continue;
 			const text = fs.readFileSync(path.join(clientDir, rel), 'utf8');
 			if (!/<head[\s>]/i.test(mask(text))) continue;
 			result.untargeted.push(rel);
@@ -396,7 +413,7 @@ export function run(args) {
 		}
 	};
 
-	for (const t of TARGETS) {
+	for (const t of EP.targets) {
 		const rel = `${CLIENT_REL}/${t}`;
 		const file = path.join(clientDir, ...t.split('/'));
 		if (!fs.existsSync(file)) {

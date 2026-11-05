@@ -100,7 +100,7 @@ To add a version:
 
 ## Version-specific exclusions and inclusions
 
-All adjustments are JSON data. There's no need to change the scripts, except to add a page (see [Custom client components](#custom-client-components)).
+All adjustments are JSON data. There's no need to change the scripts.
 
 | File | Use |
 |---|---|
@@ -118,16 +118,19 @@ All adjustments are JSON data. There's no need to change the scripts, except to 
 }
 ```
 
-**Add an entry for one version only.** Put it under `"exceptions"` in that version's anchors file, using the same keys as `overrides.json`. List entries are added to the shared lists. `roles` entries are placed first, so they win over the shared ones. Objects such as `files` are merged key by key.
+**Add an entry for one version only.** Put it under `"exceptions"` in that version's anchors file, using the same keys as `overrides.json`. List entries are added to the shared lists. `roles` entries are placed first, so they win over the shared ones. Objects such as `files` and `entryPoints` are merged key by key.
 
 ```json
 "exceptions": {
   "rules": [
     { "selector": "#formsPanel", "decls": "border-bottom-color: var(--dm-border-subtle)" }
   ],
-  "files": { "include": ["^Innovator/Client/customer/.*\\.css$"] }
+  "files": { "include": ["^Innovator/Client/customer/.*\\.css$"] },
+  "entryPoints": { "add": ["scripts/promoteDialog.html"] }
 }
 ```
+
+The 2024 anchors file (`14.0.25.json`) uses this for the Promote dialog, a separate page that only exists in that version.
 
 **Exclude something from the theme.**
 
@@ -184,13 +187,24 @@ The dark rules are shared by all pages, so selectors made only of common class n
 
 ### Pages with their own `<head>`
 
-A standalone page, such as an HTML file under `Innovator\Client\customer\`, needs the two marker lines to load the theme. To find pages the kit doesn't reach:
+A standalone page, such as an HTML file under `Innovator\Client\customer\`, needs the two marker lines to load the theme. To find pages the kit doesn't reach, pass the anchors file for your version:
 
 ```powershell
-& "$aras\Innovator\Client\nodejs\node.exe" .\DarkModeKit\lib\inject-entrypoints.mjs --target $aras --discover
+& "$aras\Innovator\Client\nodejs\node.exe" .\DarkModeKit\lib\inject-entrypoints.mjs --target $aras --anchors .\DarkModeKit\anchors\14.35.json --discover
 ```
 
-Add each page you want themed to the `TARGETS` list (`export const TARGETS = [`) in `DarkModeKit\lib\inject-entrypoints.mjs`, as a path relative to `Innovator\Client`. For example, `'customer/my-page/index.html'`. On the next apply, the page gets its marker lines and is saved to the snapshot. Its own `<style>` blocks are converted too, for that page only.
+List the pages, as paths relative to `Innovator\Client`, under `entryPoints` in `overrides.json`:
+
+```json
+"entryPoints": {
+  "add": ["customer/my-page/index.html"],
+  "ignore": ["customer/old-test/index.html"]
+}
+```
+
+- **`add`**: on the next apply, the page gets its marker lines and is saved to the snapshot. Its own `<style>` blocks are converted too, for that page only.
+- **`ignore`**: only stops `--discover` from listing a page you don't want themed, such as one that is never opened.
+- **One version only**: if a page exists in only one Aras version, put the same `entryPoints` block under `"exceptions"` in that version's anchors file instead.
 
 ### Icons
 

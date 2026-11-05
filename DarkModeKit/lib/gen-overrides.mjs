@@ -5,7 +5,7 @@ import * as util from './util.mjs';
 import { parseColor, toHex6, hexKey, toCss, COLOR_SCAN, rgbChroma } from './color.mjs';
 import { loadAnchors, scopeExceptions, derive, createMapper, renderTokensCss, buildPalette, legacyDefs, DARK, DARK_WHERE } from './derive-palette.mjs';
 import { extractBundleCss, fnv1a32 } from './extract-bundle-css.mjs';
-import { TARGETS } from './inject-entrypoints.mjs';
+import { entryPointsFromExceptions } from './inject-entrypoints.mjs';
 
 const KIT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -648,7 +648,7 @@ export function discoverPageStyleSources(X) {
 	if ((X.EX.files || {}).pageStyles === false) return { files: [], skipped: [] };
 	const files = [];
 	const skipped = [];
-	for (const t of TARGETS) {
+	for (const t of entryPointsFromExceptions(X.EX).targets) {
 		const rel = 'Innovator/Client/' + t;
 		let html;
 		try {
